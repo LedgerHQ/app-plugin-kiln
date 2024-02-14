@@ -185,8 +185,7 @@ static bool deposit_into_stragey_ui_lr(ethQueryContractUI_t *msg, context_t *con
             break;
         case 1:
             strlcpy(msg->title, "Strategy", msg->titleLength);
-            if (params->strategy_to_display == -1 ||
-                params->strategy_to_display >= LR_STRATEGIES_COUNT) {
+            if (params->strategy_to_display == -1) {
                 strlcpy(msg->msg, "UNKNOWN", msg->msgLength);
             } else {
                 strlcpy(msg->msg, lr_tickers[params->strategy_to_display], MAX_TICKER_LEN);
@@ -199,9 +198,7 @@ static bool deposit_into_stragey_ui_lr(ethQueryContractUI_t *msg, context_t *con
                 params->erc20_amount_to_display,
                 sizeof(params->erc20_amount_to_display),
                 ERC20_DECIMALS,
-                params->erc20_to_display == -1 || params->erc20_to_display >= LR_STRATEGIES_COUNT
-                    ? "UNKNOWN"
-                    : lr_tickers[params->erc20_to_display],
+                params->erc20_to_display == -1 ? "UNKNOWN" : lr_tickers[params->erc20_to_display],
                 msg->msg,
                 msg->msgLength);
             ret = true;
@@ -214,6 +211,7 @@ static bool deposit_into_stragey_ui_lr(ethQueryContractUI_t *msg, context_t *con
 }
 
 static bool queue_withdrawal_ui_lr(ethQueryContractUI_t *msg, context_t *context) {
+    // TODO: display strategies
     bool ret = false;
     lr_queue_withdrawal_t *params = &context->param_data.lr_queue_withdrawal;
 
@@ -238,6 +236,7 @@ static bool queue_withdrawal_ui_lr(ethQueryContractUI_t *msg, context_t *context
 }
 
 static bool complete_queued_withdrawal_ui_lr(ethQueryContractUI_t *msg) {
+    // TODO: display strategies
     bool ret = false;
 
     switch (msg->screenIndex) {
