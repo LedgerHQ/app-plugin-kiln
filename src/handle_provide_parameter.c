@@ -65,15 +65,12 @@ int find_lr_known_strategy(const char *address) {
 void handle_lr_deposit_into_strategy(ethPluginProvideParameter_t *msg, context_t *context) {
     uint8_t buffer[ADDRESS_LENGTH];
     char address_buffer[ADDRESS_STR_LEN];
+    cx_sha3_t sha3;
 
     switch (context->next_param) {
         case LR_DEPOSIT_INTO_STRATEGY_STRATEGY:
             copy_address(buffer, msg->parameter, sizeof(buffer));
-            getEthDisplayableAddress(buffer,
-                                     address_buffer,
-                                     sizeof(address_buffer),
-                                     msg->pluginSharedRW->sha3,
-                                     0);
+            getEthDisplayableAddress(buffer, address_buffer, sizeof(address_buffer), &sha3, 0);
             context->param_data.lr_deposit.strategy_to_display =
                 find_lr_known_strategy(address_buffer);
 
@@ -81,11 +78,7 @@ void handle_lr_deposit_into_strategy(ethPluginProvideParameter_t *msg, context_t
             break;
         case LR_DEPOSIT_INTO_STRATEGY_TOKEN:
             copy_address(buffer, msg->parameter, sizeof(buffer));
-            getEthDisplayableAddress(buffer,
-                                     address_buffer,
-                                     sizeof(address_buffer),
-                                     msg->pluginSharedRW->sha3,
-                                     0);
+            getEthDisplayableAddress(buffer, address_buffer, sizeof(address_buffer), &sha3, 0);
             context->param_data.lr_deposit.erc20_to_display = find_lr_known_erc20(address_buffer);
 
             context->next_param = LR_DEPOSIT_INTO_STRATEGY_AMOUNT;
@@ -104,6 +97,8 @@ void handle_lr_deposit_into_strategy(ethPluginProvideParameter_t *msg, context_t
 }
 
 void handle_lr_queue_withdrawal(ethPluginProvideParameter_t *msg, context_t *context) {
+    cx_sha3_t sha3;
+
     uint8_t buffer[ADDRESS_LENGTH];
 
     switch (context->next_param) {
@@ -121,7 +116,7 @@ void handle_lr_queue_withdrawal(ethPluginProvideParameter_t *msg, context_t *con
             getEthDisplayableAddress(buffer,
                                      context->param_data.lr_queue_withdrawal.withdrawer,
                                      sizeof(context->param_data.lr_queue_withdrawal.withdrawer),
-                                     msg->pluginSharedRW->sha3,
+                                     &sha3,
                                      0);
             context->next_param = LR_QUEUE_WITHDRAWAL_UNDELEGATEIFPOSSIBLE;
             break;

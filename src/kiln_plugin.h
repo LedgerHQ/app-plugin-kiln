@@ -2,7 +2,6 @@
 
 #include <string.h>
 
-#include "eth_internals.h"
 #include "eth_plugin_interface.h"
 
 #define PLUGIN_NAME        "Kiln"

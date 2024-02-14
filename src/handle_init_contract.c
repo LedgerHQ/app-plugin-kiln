@@ -1,14 +1,5 @@
 #include "kiln_plugin.h"
-
-static int find_selector(uint32_t selector, const uint32_t *selectors, size_t n, selector_t *out) {
-    for (selector_t i = 0; i < n; i++) {
-        if (selector == selectors[i]) {
-            *out = i;
-            return 0;
-        }
-    }
-    return -1;
-}
+#include "plugin_utils.h"
 
 void handle_init_contract(ethPluginInitContract_t *msg) {
     if (msg->interfaceVersion != ETH_PLUGIN_INTERFACE_VERSION_LATEST) {
@@ -26,9 +17,17 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
 
     memset(context, 0, sizeof(*context));
 
-    uint32_t selector = U4BE(msg->selector, 0);
-    if (find_selector(selector, KILN_SELECTORS, NUM_SELECTORS, &context->selectorIndex)) {
+    size_t index;
+    if (!find_selector(U4BE(msg->selector, 0), KILN_SELECTORS, NUM_SELECTORS, &index)) {
+        PRINTF("Error: selector not found!\n");
         msg->result = ETH_PLUGIN_RESULT_UNAVAILABLE;
+        return;
+    }
+    context->selectorIndex = index;
+    // check for overflow
+    if ((size_t) context->selectorIndex != index) {
+        PRINTF("Error: overflow detected on selector index!\n");
+        msg->result = ETH_PLUGIN_RESULT_ERROR;
         return;
     }
 
