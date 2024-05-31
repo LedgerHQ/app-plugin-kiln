@@ -108,7 +108,7 @@ nano_models.forEach(function (model) {
 
       const { data } = await contract.populateTransaction.depositIntoStrategy(
         '0x298aFB19A105D59E74658C4C334Ff360BadE6dd2', // mETH strategy
-        '0x1e68238ce926dec62b3fbc99ab06eb1d85ce0270', // sfrxETH erc20
+        '0x1e68238ce926dec62b3fbc99ab06eb1d85ce0270', // unknown erc20
         '420000000000000'
       );
 

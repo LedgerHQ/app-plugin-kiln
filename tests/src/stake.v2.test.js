@@ -13,7 +13,7 @@ import { ethers } from 'ethers';
 import { parseEther, parseUnits } from 'ethers/lib/utils';
 import { ledgerService } from '@ledgerhq/hw-app-eth';
 
-const contractAddr = '0x380c7e0ec45f5b62ae5a0a6d6a0b95b532e3dd9c';
+const contractAddr = '0x5db5235b5c7e247488784986e58019fffd98fda4';
 
 const pluginName = 'Kiln';
 const abi_path = `../cal/abis/${contractAddr}.json`;
