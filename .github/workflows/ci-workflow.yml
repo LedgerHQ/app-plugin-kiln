@@ -117,6 +117,7 @@ jobs:
         with:
           repository: LedgerHQ/app-ethereum
           ref: ${{ ((github.base_ref || github.ref_name) == 'main' && 'master') || (github.base_ref || github.ref_name) }}
+          submodules: recursive
 
       - name: Build
         run: |

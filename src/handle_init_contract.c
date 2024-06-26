@@ -1,3 +1,18 @@
+/*******************************************************************************
+ *
+ * ██╗  ██╗██╗██╗     ███╗   ██╗
+ * ██║ ██╔╝██║██║     ████╗  ██║
+ * █████╔╝ ██║██║     ██╔██╗ ██║
+ * ██╔═██╗ ██║██║     ██║╚██╗██║
+ * ██║  ██╗██║███████╗██║ ╚████║
+ * ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝
+ *
+ * Kiln Ethereum Ledger App
+ * (c) 2022-2024 Kiln
+ *
+ * contact@kiln.fi
+ ********************************************************************************/
+
 #include "kiln_plugin.h"
 #include "plugin_utils.h"
 
@@ -24,6 +39,7 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
         return;
     }
     context->selectorIndex = index;
+
     // check for overflow
     if ((size_t) context->selectorIndex != index) {
         PRINTF("Error: overflow detected on selector index!\n");
@@ -35,18 +51,12 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
 
     switch (context->selectorIndex) {
         case KILN_V1_DEPOSIT:
-            break;
-
         case KILN_V1_WITHDRAW:
         case KILN_V1_WITHDRAW_EL:
         case KILN_V1_WITHDRAW_CL:
-            break;
-
         case KILN_V1_BATCH_WITHDRAW:
         case KILN_V1_BATCH_WITHDRAW_EL:
         case KILN_V1_BATCH_WITHDRAW_CL:
-            break;
-
         case KILN_V1_REQUEST_EXIT:
             break;
 
@@ -59,11 +69,16 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
         case KILN_LR_DEPOSIT_INTO_STRATEGY:
             context->next_param = LR_DEPOSIT_INTO_STRATEGY_STRATEGY;
             break;
-        case KILN_LR_QUEUE_WITHDRAWAL:
-            context->next_param = LR_QUEUE_WITHDRAWAL_STRATEGY_INDEXES_OFFSET;
+        case KILN_LR_QUEUE_WITHDRAWALS:
+            context->next_param = LR_QUEUE_WITHDRAWALS_QWITHDRAWALS_OFFSET;
             break;
-        case KILN_LR_COMPLETE_QUEUED_WITHDRAWAL:
-            context->next_param = LR_COMPLETE_QUEUED_WITHDRAWAL_QUEUEDWITHDRAWAL_OFFSET;
+        case KILN_LR_COMPLETE_QUEUED_WITHDRAWALS:
+            context->next_param = LRCQW_WITHDRAWALS_OFFSET;
+            break;
+        case KILN_LR_DELEGATE_TO:
+            context->next_param = LR_DELEGATE_TO_OPERATOR;
+            break;
+        case KILN_LR_UNDELEGATE:
             break;
 
         default:
