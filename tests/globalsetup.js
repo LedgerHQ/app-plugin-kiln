@@ -10,8 +10,6 @@ const catchExit = async () => {
 };
 
 module.exports = async () => {
-  console.log('Waited 7 seconds before running tests\n');
-  await new Promise((resolve) => setTimeout(resolve, 7000));
   await catchExit();
   await Zemu.checkAndPullImage();
   await Zemu.stopAllEmuContainers();

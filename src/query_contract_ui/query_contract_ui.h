@@ -40,3 +40,9 @@ bool queue_withdrawals_ui(ethQueryContractUI_t *msg, context_t *context);
 bool complete_queued_withdrawals_ui(ethQueryContractUI_t *msg, context_t *context);
 bool delegate_to_ui(ethQueryContractUI_t *msg, context_t *context);
 bool undelegate_ui(ethQueryContractUI_t *msg);
+
+// DeFi UI
+bool defi_deposit_ui(ethQueryContractUI_t *msg, context_t *context);
+bool defi_mint_ui(ethQueryContractUI_t *msg, context_t *context);
+bool defi_withdraw_ui(ethQueryContractUI_t *msg, context_t *context);
+bool defi_redeem_ui(ethQueryContractUI_t *msg, context_t *context);

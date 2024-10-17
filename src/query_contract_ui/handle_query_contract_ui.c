@@ -79,6 +79,22 @@ void handle_query_contract_ui(ethQueryContractUI_t *msg) {
             ret = undelegate_ui(msg);
             break;
 
+        case KILN_DEFI_DEPOSIT:
+            ret = defi_deposit_ui(msg, context);
+            break;
+
+        case KILN_DEFI_MINT:
+            ret = defi_mint_ui(msg, context);
+            break;
+
+        case KILN_DEFI_WITHDRAW:
+            ret = defi_withdraw_ui(msg, context);
+            break;
+
+        case KILN_DEFI_REDEEM:
+            ret = defi_redeem_ui(msg, context);
+            break;
+
         default:
             PRINTF("Selector Index not supported: %d\n", context->selectorIndex);
             break;

@@ -90,6 +90,19 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
             context->next_param = LR_UNDELEGATE_ADDRESS;
             break;
 
+        case KILN_DEFI_DEPOSIT:
+            context->next_param = DEFI_DEPOSIT_ASSETS_AMOUNT;
+            break;
+        case KILN_DEFI_MINT:
+            context->next_param = DEFI_MINT_SHARES_AMOUNT;
+            break;
+        case KILN_DEFI_WITHDRAW:
+            context->next_param = DEFI_WITHDRAW_ASSETS_AMOUNT;
+            break;
+        case KILN_DEFI_REDEEM:
+            context->next_param = DEFI_REDEEM_SHARES_AMOUNT;
+            break;
+
         default:
             PRINTF("Missing selectorIndex: %d\n", context->selectorIndex);
             msg->result = ETH_PLUGIN_RESULT_ERROR;

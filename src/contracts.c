@@ -56,6 +56,16 @@ static const uint32_t KILN_LR_DELEGATE_TO_SELECTOR = 0xeea9064b;
 // --- cast sig "undelegate(address)"
 static const uint32_t KILN_LR_UNDELEGATE_SELECTOR = 0xda8be864;
 
+// DEFI - ERC20 Strategies
+// --- cast sig "deposit(uint256,address)"
+static const uint32_t KILN_DEFI_DEPOSIT_SELECTOR = 0x6e553f65;
+// --- cast sig "mint(uint256,address)"
+static const uint32_t KILN_DEFI_MINT_SELECTOR = 0x94bf804d;
+// --- cast sig "withdraw(uint256,address,address)"
+static const uint32_t KILN_DEFI_WITHDRAW_SELECTOR = 0xb460af94;
+// --- cast sig "redeem(uint256,address,address)"
+static const uint32_t KILN_DEFI_REDEEM_SELECTOR = 0xba087652;
+
 const char ocv2_exit_queues[OCV2_MAX_EXIT_QUEUES][ADDRESS_STR_LEN] = {
     "0x8d6Fd650500f82c7D978a440348e5a9b886943bF",  // Kiln
     "0x86358F7B33b599c484e0335B8Ee4f7f7f92d8b60"   // Coinbase
@@ -125,4 +135,9 @@ const uint32_t KILN_SELECTORS[NUM_SELECTORS] = {
     KILN_LR_COMPLETE_QUEUED_WITHDRAWALS_SELECTOR,
     KILN_LR_DELEGATE_TO_SELECTOR,
     KILN_LR_UNDELEGATE_SELECTOR,
+    // DEFI
+    KILN_DEFI_DEPOSIT_SELECTOR,
+    KILN_DEFI_MINT_SELECTOR,
+    KILN_DEFI_WITHDRAW_SELECTOR,
+    KILN_DEFI_REDEEM_SELECTOR,
 };

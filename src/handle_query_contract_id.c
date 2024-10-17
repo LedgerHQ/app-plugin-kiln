@@ -49,6 +49,13 @@ void handle_query_contract_id(ethQueryContractID_t *msg) {
             strlcpy(msg->version, "EigenLayer", msg->versionLength);
             break;
 
+        case KILN_DEFI_DEPOSIT:
+        case KILN_DEFI_MINT:
+        case KILN_DEFI_WITHDRAW:
+        case KILN_DEFI_REDEEM:
+            strlcpy(msg->version, "DeFi", msg->versionLength);
+            break;
+
         default:
             PRINTF("Selector Index not supported: %d\n", context->selectorIndex);
             msg->result = ETH_PLUGIN_RESULT_ERROR;

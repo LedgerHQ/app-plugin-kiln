@@ -1,0 +1,28 @@
+{
+    "chainId": 51,
+    "contracts": [
+        {
+            "address": "0x6e90b52a5eab4e4a08135dcf8c93abdf6cae9c91",
+            "contractName": "VENUS_USDC",
+            "selectors": {
+                "0x6e553f65": {
+                    "method": "deposit",
+                    "plugin": "Kiln"
+                },
+                "0x94bf804d": {
+                    "method": "mint",
+                    "plugin": "Kiln"
+                },
+                "0xb460af94": {
+                    "method": "withdraw",
+                    "plugin": "Kiln"
+                },
+                "0xba087652": {
+                    "method": "redeem",
+                    "plugin": "Kiln"
+                }
+            }
+        }
+    ],
+    "name": "Kiln"
+}
