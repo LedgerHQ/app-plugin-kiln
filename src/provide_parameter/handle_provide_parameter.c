@@ -67,6 +67,19 @@ void handle_provide_parameter(ethPluginProvideParameter_t *msg) {
             handle_lr_undelegate(msg, context);
             break;
 
+        case KILN_DEFI_DEPOSIT:
+            handle_defi_deposit(msg, context);
+            break;
+        case KILN_DEFI_MINT:
+            handle_defi_mint(msg, context);
+            break;
+        case KILN_DEFI_WITHDRAW:
+            handle_defi_withdraw(msg, context);
+            break;
+        case KILN_DEFI_REDEEM:
+            handle_defi_redeem(msg, context);
+            break;
+
         default:
             PRINTF("Selector Index not supported: %d\n", context->selectorIndex);
             msg->result = ETH_PLUGIN_RESULT_ERROR;

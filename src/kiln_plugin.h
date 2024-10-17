@@ -56,7 +56,13 @@
 // --- 15. delegateTo(address,(bytes,uint256),bytes32)
 // --- 16. undelegate(address)
 //
-#define NUM_SELECTORS 17
+// DEFI
+// --- 17. deposit(uint256,address)
+// --- 18. mint(uint256,address)
+// --- 19. withdraw(uint256,address,address)
+// --- 20. redeem(uint256,address,address)
+//
+#define NUM_SELECTORS 21
 extern const uint32_t KILN_SELECTORS[NUM_SELECTORS];
 
 // Selectors available (see mapping above).
@@ -78,6 +84,10 @@ typedef enum {
     KILN_LR_COMPLETE_QUEUED_WITHDRAWALS,
     KILN_LR_DELEGATE_TO,
     KILN_LR_UNDELEGATE,
+    KILN_DEFI_DEPOSIT,
+    KILN_DEFI_MINT,
+    KILN_DEFI_WITHDRAW,
+    KILN_DEFI_REDEEM,
 } selector_t;
 
 // ****************************************************************************
@@ -333,6 +343,60 @@ typedef struct {
 } lr_complete_queued_withdrawals_t;
 
 // ****************************************************************************
+// * DEFI
+// ****************************************************************************
+
+typedef enum {
+    DEFI_DEPOSIT_UNEXPECTED_PARAMETER = 0,
+    DEFI_DEPOSIT_ASSETS_AMOUNT,
+    DEFI_DEPOSIT_RECEIVER_ADDRESS,
+} defi_deposit_parameters;
+
+typedef enum {
+    DEFI_MINT_UNEXPECTED_PARAMETER = 0,
+    DEFI_MINT_SHARES_AMOUNT,
+    DEFI_MINT_RECEIVER_ADDRESS,
+} defi_mint_parameters;
+
+typedef enum {
+    DEFI_WITHDRAW_UNEXPECTED_PARAMETER = 0,
+    DEFI_WITHDRAW_ASSETS_AMOUNT,
+    DEFI_WITHDRAW_RECEIVER_ADDRESS,
+    DEFI_WITHDRAW_OWNER_ADDRESS,
+} defi_withdraw_parameters;
+
+typedef enum {
+    DEFI_REDEEM_UNEXPECTED_PARAMETER = 0,
+    DEFI_REDEEM_SHARES_AMOUNT,
+    DEFI_REDEEM_RECEIVER_ADDRESS,
+    DEFI_REDEEM_OWNER_ADDRESS,
+} defi_redeem_parameters;
+
+// ****************************************************************************
+
+typedef struct {
+    uint8_t assets_amount[INT256_LENGTH];
+    char receiver_address[ADDRESS_STR_LEN];
+} defi_deposit_t;
+
+typedef struct {
+    uint8_t shares_amount[INT256_LENGTH];
+    char receiver_address[ADDRESS_STR_LEN];
+} defi_mint_t;
+
+typedef struct {
+    uint8_t assets_amount[INT256_LENGTH];
+    char receiver_address[ADDRESS_LENGTH];
+    char owner_address[ADDRESS_STR_LEN];
+} defi_withdraw_t;
+
+typedef struct {
+    uint8_t shares_amount[INT256_LENGTH];
+    char receiver_address[ADDRESS_LENGTH];
+    char owner_address[ADDRESS_STR_LEN];
+} defi_redeem_t;
+
+// ****************************************************************************
 // * SHARED PLUGIN CONTEXT MEMORY
 // ****************************************************************************
 
@@ -350,6 +414,11 @@ typedef struct context_t {
         lr_delegate_to_t lr_delegate_to;
         lr_queue_withdrawals_t lr_queue_withdrawals;
         lr_complete_queued_withdrawals_t lr_complete_queued_withdrawals;
+
+        defi_deposit_t defi_deposit;
+        defi_mint_t defi_mint;
+        defi_withdraw_t defi_withdraw;
+        defi_redeem_t defi_redeem;
     } param_data;
 
     selector_t selectorIndex;

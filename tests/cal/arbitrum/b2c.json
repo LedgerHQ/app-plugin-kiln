@@ -1,0 +1,50 @@
+{
+    "chainId": 42161,
+    "contracts": [
+        {
+            "address": "0xca8f5dbc4c90678763b291217e6dddfca00341d0",
+            "contractName": "COMPV3_USDC",
+            "selectors": {
+                "0x6e553f65": {
+                    "method": "deposit",
+                    "plugin": "Kiln"
+                },
+                "0x94bf804d": {
+                    "method": "mint",
+                    "plugin": "Kiln"
+                },
+                "0xb460af94": {
+                    "method": "withdraw",
+                    "plugin": "Kiln"
+                },
+                "0xba087652": {
+                    "method": "redeem",
+                    "plugin": "Kiln"
+                }
+            }
+        },
+        {
+            "address": "0xff131917e1d6751e4d1b17612751db521b1403c5",
+            "contractName": "AAVEV3_USDC",
+            "selectors": {
+                "0x6e553f65": {
+                    "method": "deposit",
+                    "plugin": "Kiln"
+                },
+                "0x94bf804d": {
+                    "method": "mint",
+                    "plugin": "Kiln"
+                },
+                "0xb460af94": {
+                    "method": "withdraw",
+                    "plugin": "Kiln"
+                },
+                "0xba087652": {
+                    "method": "redeem",
+                    "plugin": "Kiln"
+                }
+            }
+        }
+    ],
+    "name": "Kiln"
+}
