@@ -20,6 +20,10 @@
 
 #include "kiln_plugin.h"
 
+void handle_v2_request_exit(ethPluginProvideParameter_t *msg, context_t *context);
+void handle_v2_claim(ethPluginProvideParameter_t *msg, context_t *context);
+void handle_v2_multiclaim(ethPluginProvideParameter_t *msg, context_t *context);
+
 void handle_lr_deposit_into_strategy(ethPluginProvideParameter_t *msg, context_t *context);
 void handle_lr_queue_withdrawals(ethPluginProvideParameter_t *msg, context_t *context);
 void handle_lr_complete_queued_withdrawals(ethPluginProvideParameter_t *msg, context_t *context);

@@ -56,6 +56,11 @@ static const uint32_t KILN_LR_DELEGATE_TO_SELECTOR = 0xeea9064b;
 // --- cast sig "undelegate(address)"
 static const uint32_t KILN_LR_UNDELEGATE_SELECTOR = 0xda8be864;
 
+const char ocv2_exit_queues[OCV2_MAX_EXIT_QUEUES][ADDRESS_STR_LEN] = {
+    "0x8d6Fd650500f82c7D978a440348e5a9b886943bF",  // Kiln
+    "0x86358F7B33b599c484e0335B8Ee4f7f7f92d8b60"   // Coinbase
+};
+
 const char lr_strategy_addresses[LR_STRATEGIES_COUNT][ADDRESS_STR_LEN] = {
     "0x54945180dB7943c0ed0FEE7EdaB2Bd24620256bc",  // cbETH
     "0x93c4b944D05dfe6df7645A86cd2206016c51564D",  // stETH
