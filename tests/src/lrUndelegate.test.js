@@ -16,7 +16,7 @@ import { ledgerService } from '@ledgerhq/hw-app-eth';
 const contractAddr = '0x39053d51b77dc0d36036fc1fcc8cb819df8ef37a'; // delegation manager
 
 const pluginName = 'Kiln';
-const abi_path = `../cal/abis/${contractAddr}.json`;
+const abi_path = `../cal/ethereum/abis/${contractAddr}.json`;
 const abi = require(abi_path);
 
 nano_models.forEach(function (model) {
