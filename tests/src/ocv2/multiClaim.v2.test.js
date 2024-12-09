@@ -5,14 +5,12 @@ import {
   zemu,
   genericTx,
   nano_models,
-  SPECULOS_ADDRESS,
-  txFromEtherscan,
-} from './test.fixture';
+} from '../test.fixture';
 import { ethers } from 'ethers';
-import { parseEther, parseUnits } from 'ethers/lib/utils';
+import { parseEther } from 'ethers/lib/utils';
 import { ledgerService } from '@ledgerhq/hw-app-eth';
 
-const contractAddr = '0x1e68238ce926dec62b3fbc99ab06eb1d85ce0270';
+const contractAddr = '0x5db5235b5c7e247488784986e58019fffd98fda4';
 
 const pluginName = 'Kiln';
 const abi_path = `../cal/ethereum/abis/${contractAddr}.json`;
@@ -20,22 +18,27 @@ const abi = require(abi_path);
 
 nano_models.forEach(function (model) {
   test(
-    '[Nano ' + model.letter + '] Withdraw EL',
+    '[Nano ' + model.letter + '] MultiClaim V2 Eth',
     zemu(model, async (sim, eth) => {
       const contract = new ethers.Contract(contractAddr, abi);
 
-      const validatorAddress =
-        '0x8905410ae09a0b89d6af7296e2d0ae19adb672744f600d8da9b6293259641aa6e316bee60936cc1459b3f8697343d0f0';
-
-      const { data } = await contract.populateTransaction.withdrawELFee(
-        validatorAddress
+      const { data } = await contract.populateTransaction.multiClaim(
+        ['0x5db5235b5c7e247488784986e58019fffd98fda4'],
+        [
+          [42, 47],
+          [150, 2],
+        ],
+        [
+          [0, 1],
+          [0, 1],
+        ]
       );
 
       let unsignedTx = genericTx;
 
-      unsignedTx.value = 0;
       unsignedTx.to = contractAddr;
       unsignedTx.data = data;
+      unsignedTx.value = parseEther('0');
 
       const serializedTx = ethers.utils
         .serializeTransaction(unsignedTx)
@@ -51,14 +54,12 @@ nano_models.forEach(function (model) {
       const right_clicks = 4;
 
       await waitForAppScreen(sim);
-
-      await sim.navigateAndCompareSnapshots('.', model.name + '_withdrawEL', [
+      await sim.navigateAndCompareSnapshots('.', model.name + '_multiClaimv2', [
         right_clicks,
         0,
       ]);
-
       await tx;
     }),
-    15000
+    30000
   );
 });

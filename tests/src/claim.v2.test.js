@@ -8,7 +8,7 @@ import { ledgerService } from '@ledgerhq/hw-app-eth';
 const contractAddr = '0x8d6fd650500f82c7d978a440348e5a9b886943bf';
 
 const pluginName = 'Kiln';
-const abi_path = `../cal/abis/${contractAddr}.json`;
+const abi_path = `../cal/ethereum/abis/${contractAddr}.json`;
 const abi = require(abi_path);
 
 nano_models.forEach(function (model) {

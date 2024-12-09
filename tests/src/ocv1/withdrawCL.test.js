@@ -7,7 +7,7 @@ import {
   nano_models,
   SPECULOS_ADDRESS,
   txFromEtherscan,
-} from './test.fixture';
+} from '../test.fixture';
 import { ethers } from 'ethers';
 import { parseEther, parseUnits } from 'ethers/lib/utils';
 import { ledgerService } from '@ledgerhq/hw-app-eth';
@@ -20,14 +20,14 @@ const abi = require(abi_path);
 
 nano_models.forEach(function (model) {
   test(
-    '[Nano ' + model.letter + '] Withdraw EL',
+    '[Nano ' + model.letter + '] Withdraw CL',
     zemu(model, async (sim, eth) => {
       const contract = new ethers.Contract(contractAddr, abi);
 
       const validatorAddress =
         '0x8905410ae09a0b89d6af7296e2d0ae19adb672744f600d8da9b6293259641aa6e316bee60936cc1459b3f8697343d0f0';
 
-      const { data } = await contract.populateTransaction.withdrawELFee(
+      const { data } = await contract.populateTransaction.withdrawCLFee(
         validatorAddress
       );
 
@@ -52,13 +52,13 @@ nano_models.forEach(function (model) {
 
       await waitForAppScreen(sim);
 
-      await sim.navigateAndCompareSnapshots('.', model.name + '_withdrawEL', [
+      await sim.navigateAndCompareSnapshots('.', model.name + '_withdrawCL', [
         right_clicks,
         0,
       ]);
 
       await tx;
     }),
-    15000
+    10000
   );
 });

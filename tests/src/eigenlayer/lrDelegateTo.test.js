@@ -8,7 +8,7 @@ import {
   nano_models,
   SPECULOS_ADDRESS,
   txFromEtherscan,
-} from './test.fixture';
+} from '../test.fixture';
 import { ethers } from 'ethers';
 import { parseEther, parseUnits } from 'ethers/lib/utils';
 import { ledgerService } from '@ledgerhq/hw-app-eth';
