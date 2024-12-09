@@ -92,13 +92,53 @@ typedef enum {
 #define MAX_DISPLAYABLE_LR_STRATEGIES_COUNT 32  // must be > LR_STRATEGIES_COUNT
 #define ERC20_DECIMALS                      18
 #define PARAM_OFFSET                        32
+#define OCV2_MAX_EXIT_QUEUES                2
 
+extern const char ocv2_exit_queues[OCV2_MAX_EXIT_QUEUES][ADDRESS_STR_LEN];
 extern const char lr_strategy_addresses[LR_STRATEGIES_COUNT][ADDRESS_STR_LEN];
 extern const char lr_erc20_addresses[LR_STRATEGIES_COUNT][ADDRESS_STR_LEN];
 extern const char lr_tickers[LR_STRATEGIES_COUNT][MAX_TICKER_LEN];
 extern const char lr_kiln_operator_address[ADDRESS_STR_LEN];
 
 // ****************************************************************************
+
+// Parameters and state machines for OCV2 parsing
+
+typedef enum {
+    V2_REQUEST_EXIT_UNEXPECTED_PARAMETER = 0,
+    V2_REQUEST_EXIT_AMOUNT,
+} v2_request_exit_parameters;
+
+typedef enum {
+    V2_CLAIM_UNEXPECTED_PARAMETER = 0,
+    V2_CLAIM_TICKET_IDS_OFFSET,
+    V2_CLAIM_CASK_IDS_OFFSET,
+    V2_CLAIM_MAX_CLAIM_DEPTH,
+    V2_CLAIM_TICKET_IDS_LENGTH,
+    V2_CLAIM_TICKET_IDS__ITEMS,
+    V2_CLAIM_CASK_IDS_LENGTH,
+    V2_CLAIM_CASK_IDS__ITEMS,
+} v2_claim;
+
+typedef enum {
+    V2_MULTICLAIM_UNEXPECTED_PARAMETER = 0,
+    V2_MULTICLAIM_EXIT_QUEUES_OFFSET,
+    V2_MULTICLAIM_TICKET_IDS_OFFSET,
+    V2_MULTICLAIM_CASK_IDS_OFFSET,
+
+    V2_MULTICLAIM_EXIT_QUEUES_LENGTH,
+    V2_MULTICLAIM_EXIT_QUEUES__ITEMS,
+
+    V2_MULTICLAIM_TICKETIDS_LENGTH,
+    V2_MULTICLAIM_TICKETIDS__OFFSET_ITEMS,
+    V2_MULTICLAIM_TICKETIDS__ITEM_LENGTH,
+    V2_MULTICLAIM_TICKETIDS__ITEM__ITEMS,
+
+    V2_MULTICLAIM_CASKIDS_LENGTH,
+    V2_MULTICLAIM_CASKIDS__OFFSET_ITEMS,
+    V2_MULTICLAIM_CASKIDS__ITEM_LENGTH,
+    V2_MULTICLAIM_CASKIDS__ITEM__ITEMS,
+} v2_multiclaim_parameters;
 
 // Parameters and state machines for EigenLayer parsing
 
@@ -172,6 +212,21 @@ typedef enum {
 // ****************************************************************************
 
 // Parsing structures
+
+typedef struct {
+    uint8_t amount[INT256_LENGTH];
+} v2_request_exit_t;
+
+typedef struct {
+    // -- utils
+    uint16_t current_item_count;
+} v2_claim_t;
+
+typedef struct {
+    // -- utils
+    uint16_t parent_item_count;
+    uint16_t current_item_count;
+} v2_multiclaim_t;
 
 typedef struct {
     int strategy_to_display;
@@ -254,12 +309,15 @@ typedef struct {
 // ****************************************************************************
 // * SHARED PLUGIN CONTEXT MEMORY
 // ****************************************************************************
-// [100] receiveAsTokens_offset
 
 typedef struct context_t {
     uint8_t next_param;
 
     union {
+        v2_request_exit_t v2_request_exit;
+        v2_claim_t v2_claim;
+        v2_multiclaim_t v2_multiclaim;
+
         lr_deposit_t lr_deposit;
         lr_delegate_to_t lr_delegate_to;
         lr_queue_withdrawals_t lr_queue_withdrawals;
