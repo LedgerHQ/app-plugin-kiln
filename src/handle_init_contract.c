@@ -51,6 +51,7 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
 
     switch (context->selectorIndex) {
         case KILN_V1_DEPOSIT:
+            break;
         case KILN_V1_WITHDRAW:
         case KILN_V1_WITHDRAW_EL:
         case KILN_V1_WITHDRAW_CL:
@@ -58,6 +59,7 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
         case KILN_V1_BATCH_WITHDRAW_EL:
         case KILN_V1_BATCH_WITHDRAW_CL:
         case KILN_V1_REQUEST_EXIT:
+            context->next_param = V1_WFUNCS_BYTES_OFFSET;
             break;
 
         case KILN_V2_STAKE:
@@ -85,6 +87,7 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
             context->next_param = LR_DELEGATE_TO_OPERATOR;
             break;
         case KILN_LR_UNDELEGATE:
+            context->next_param = LR_UNDELEGATE_ADDRESS;
             break;
 
         default:

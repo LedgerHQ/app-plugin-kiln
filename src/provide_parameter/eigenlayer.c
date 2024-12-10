@@ -1145,3 +1145,30 @@ void handle_lr_delegate_to(ethPluginProvideParameter_t *msg, context_t *context)
     }
     msg->result = ETH_PLUGIN_RESULT_OK;
 }
+
+void handle_lr_undelegate(ethPluginProvideParameter_t *msg, context_t *context) {
+    // **************************************************************************
+    // FUNCTION TO PARSE
+    // **************************************************************************
+    //
+    // function undelegate(
+    //    address staker
+    // ) external
+    //
+    // **************************************************************************
+    // example
+    // [0] selector
+    // [4] address
+
+    switch (context->next_param) {
+        case LR_UNDELEGATE_ADDRESS: {
+            context->next_param = LR_UNDELEGATE_UNEXPECTED_PARAMETER;
+            break;
+        }
+        default:
+            PRINTF("Param not supported: %d\n", context->next_param);
+            msg->result = ETH_PLUGIN_RESULT_ERROR;
+            return;
+    }
+    msg->result = ETH_PLUGIN_RESULT_OK;
+}

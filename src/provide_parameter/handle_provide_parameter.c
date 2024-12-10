@@ -31,16 +31,11 @@ void handle_provide_parameter(ethPluginProvideParameter_t *msg) {
         case KILN_V1_WITHDRAW:
         case KILN_V1_WITHDRAW_EL:
         case KILN_V1_WITHDRAW_CL:
-            msg->result = ETH_PLUGIN_RESULT_OK;
-            break;
         case KILN_V1_BATCH_WITHDRAW:
         case KILN_V1_BATCH_WITHDRAW_EL:
         case KILN_V1_BATCH_WITHDRAW_CL:
-            msg->result = ETH_PLUGIN_RESULT_OK;
-            break;
-
         case KILN_V1_REQUEST_EXIT:
-            msg->result = ETH_PLUGIN_RESULT_OK;
+            handle_v1_withdraw_funcs(msg, context);
             break;
 
         case KILN_V2_STAKE:
@@ -69,7 +64,7 @@ void handle_provide_parameter(ethPluginProvideParameter_t *msg) {
             handle_lr_delegate_to(msg, context);
             break;
         case KILN_LR_UNDELEGATE:
-            msg->result = ETH_PLUGIN_RESULT_OK;
+            handle_lr_undelegate(msg, context);
             break;
 
         default:
