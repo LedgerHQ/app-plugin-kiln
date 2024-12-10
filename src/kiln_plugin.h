@@ -102,6 +102,15 @@ extern const char lr_kiln_operator_address[ADDRESS_STR_LEN];
 
 // ****************************************************************************
 
+// Parameters and state machines for OCV1 parsing
+
+typedef enum {
+    V1_WFUNCS_UNEXPECTED_PARAMETER = 0,
+    V1_WFUNCS_BYTES_OFFSET,
+    V1_WFUNCS_BYTES_LENGTH,
+    V1_WFUNCS_BYTES__ITEMS,
+} v1_withdraw_funcs_parameters;
+
 // Parameters and state machines for OCV2 parsing
 
 typedef enum {
@@ -141,6 +150,11 @@ typedef enum {
 } v2_multiclaim_parameters;
 
 // Parameters and state machines for EigenLayer parsing
+
+typedef enum {
+    LR_UNDELEGATE_UNEXPECTED_PARAMETER = 0,
+    LR_UNDELEGATE_ADDRESS,
+} lr_undelegate_parameters;
 
 typedef enum {
     LR_DEPOSIT_INTO_STRATEGY_UNEXPECTED_PARAMETER = 0,
@@ -212,6 +226,10 @@ typedef enum {
 // ****************************************************************************
 
 // Parsing structures
+
+typedef struct {
+    uint16_t current_item_count;
+} v1_withdraw_funcs_t;
 
 typedef struct {
     uint8_t amount[INT256_LENGTH];
@@ -314,6 +332,8 @@ typedef struct context_t {
     uint8_t next_param;
 
     union {
+        v1_withdraw_funcs_t v1_withdraw_funcs;
+
         v2_request_exit_t v2_request_exit;
         v2_claim_t v2_claim;
         v2_multiclaim_t v2_multiclaim;
