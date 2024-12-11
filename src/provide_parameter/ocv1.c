@@ -41,9 +41,19 @@ void handle_v1_withdraw_funcs(ethPluginProvideParameter_t *msg, context_t *conte
     v1_withdraw_funcs_t *params = &context->param_data.v1_withdraw_funcs;
 
     switch (context->next_param) {
-        case V1_WFUNCS_BYTES_OFFSET:
+        case V1_WFUNCS_BYTES_OFFSET: {
+            uint16_t offset;
+            U2BE_from_parameter(msg->parameter, &offset);
+            if (offset != PARAMETER_LENGTH) {
+                PRINTF("Malformed calldata, unexpected parameter offset %d != %d\n",
+                       offset,
+                       PARAM_OFFSET);
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+                return;
+            }
             context->next_param = V1_WFUNCS_BYTES_LENGTH;
             break;
+        }
         case V1_WFUNCS_BYTES_LENGTH:
             U2BE_from_parameter(msg->parameter, &params->current_item_count);
             context->next_param = V1_WFUNCS_BYTES__ITEMS;
