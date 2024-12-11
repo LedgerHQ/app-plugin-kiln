@@ -72,10 +72,22 @@ void handle_v2_claim(ethPluginProvideParameter_t *msg, context_t *context) {
     v2_claim_t *params = &context->param_data.v2_claim;
 
     switch (context->next_param) {
-        case V2_CLAIM_TICKET_IDS_OFFSET:
+        case V2_CLAIM_TICKET_IDS_OFFSET: {
+            uint16_t offset;
+            U2BE_from_parameter(msg->parameter, &offset);
+            if (offset != PARAMETER_LENGTH * 3) {
+                PRINTF("Malformed calldata, unexpected parameter offset %d != %d\n",
+                       offset,
+                       PARAMETER_LENGTH);
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+                return;
+            }
             context->next_param = V2_CLAIM_CASK_IDS_OFFSET;
             break;
+        }
         case V2_CLAIM_CASK_IDS_OFFSET:
+            U2BE_from_parameter(msg->parameter, &params->cask_ids_offset);
+            params->cask_ids_offset += SELECTOR_SIZE;
             context->next_param = V2_CLAIM_MAX_CLAIM_DEPTH;
             break;
         case V2_CLAIM_MAX_CLAIM_DEPTH:
@@ -92,6 +104,13 @@ void handle_v2_claim(ethPluginProvideParameter_t *msg, context_t *context) {
             }
             break;
         case V2_CLAIM_CASK_IDS_LENGTH:
+            if (msg->parameterOffset != params->cask_ids_offset) {
+                PRINTF("Malformed calldata, unexpected parameter offset %d != %d\n",
+                       msg->parameterOffset,
+                       params->cask_ids_offset);
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+                return;
+            }
             U2BE_from_parameter(msg->parameter, &params->current_item_count);
             context->next_param = V2_CLAIM_CASK_IDS__ITEMS;
             break;

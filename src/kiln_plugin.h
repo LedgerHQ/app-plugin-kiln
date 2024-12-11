@@ -236,6 +236,7 @@ typedef struct {
 } v2_request_exit_t;
 
 typedef struct {
+    uint16_t cask_ids_offset;
     // -- utils
     uint16_t current_item_count;
 } v2_claim_t;
