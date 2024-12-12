@@ -18,8 +18,6 @@
 void handle_finalize(ethPluginFinalize_t *msg) {
     context_t *context = (context_t *) msg->pluginContext;
 
-    msg->uiType = ETH_UI_TYPE_GENERIC;
-
     // if any of the parsers did not complete, we return an error
     if (context->next_param != V1_WFUNCS_UNEXPECTED_PARAMETER &&
         context->next_param != V2_REQUEST_EXIT_UNEXPECTED_PARAMETER &&
@@ -34,6 +32,8 @@ void handle_finalize(ethPluginFinalize_t *msg) {
         msg->result = ETH_PLUGIN_RESULT_ERROR;
         return;
     }
+
+    msg->uiType = ETH_UI_TYPE_GENERIC;
 
     switch (context->selectorIndex) {
         case KILN_V1_DEPOSIT:
