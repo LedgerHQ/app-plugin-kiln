@@ -20,6 +20,21 @@ void handle_finalize(ethPluginFinalize_t *msg) {
 
     msg->uiType = ETH_UI_TYPE_GENERIC;
 
+    // if any of the parsers did not complete, we return an error
+    if (context->next_param != V1_WFUNCS_UNEXPECTED_PARAMETER &&
+        context->next_param != V2_REQUEST_EXIT_UNEXPECTED_PARAMETER &&
+        context->next_param != V2_CLAIM_UNEXPECTED_PARAMETER &&
+        context->next_param != V2_MULTICLAIM_UNEXPECTED_PARAMETER &&
+        context->next_param != LR_UNDELEGATE_UNEXPECTED_PARAMETER &&
+        context->next_param != LR_DEPOSIT_INTO_STRATEGY_UNEXPECTED_PARAMETER &&
+        context->next_param != LR_QUEUE_WITHDRAWALS_UNEXPECTED_PARAMETER &&
+        context->next_param != LRCQW_UNEXPECTED_PARAMETER &&
+        context->next_param != LR_DELEGATE_TO_UNEXPECTED_PARAMETER) {
+        PRINTF("Unexpected parameter\n");
+        msg->result = ETH_PLUGIN_RESULT_ERROR;
+        return;
+    }
+
     switch (context->selectorIndex) {
         case KILN_V1_DEPOSIT:
         case KILN_V1_WITHDRAW:
