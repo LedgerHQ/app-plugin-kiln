@@ -98,7 +98,9 @@ void handle_v2_claim(ethPluginProvideParameter_t *msg, context_t *context) {
             context->next_param = V2_CLAIM_TICKET_IDS__ITEMS;
             break;
         case V2_CLAIM_TICKET_IDS__ITEMS:
-            params->current_item_count -= 1;
+            if (params->current_item_count > 0) {
+                params->current_item_count -= 1;
+            }
             if (params->current_item_count == 0) {
                 context->next_param = V2_CLAIM_CASK_IDS_LENGTH;
             }
@@ -115,7 +117,9 @@ void handle_v2_claim(ethPluginProvideParameter_t *msg, context_t *context) {
             context->next_param = V2_CLAIM_CASK_IDS__ITEMS;
             break;
         case V2_CLAIM_CASK_IDS__ITEMS:
-            params->current_item_count -= 1;
+            if (params->current_item_count > 0) {
+                params->current_item_count -= 1;
+            }
             if (params->current_item_count == 0) {
                 context->next_param = V2_CLAIM_UNEXPECTED_PARAMETER;
             }
@@ -216,7 +220,9 @@ void handle_v2_multiclaim(ethPluginProvideParameter_t *msg, context_t *context) 
                 return;
             }
 
-            params->current_item_count -= 1;
+            if (params->current_item_count > 0) {
+                params->current_item_count -= 1;
+            }
             if (params->current_item_count == 0) {
                 context->next_param = V2_MULTICLAIM_TICKETIDS_LENGTH;
             }
@@ -274,7 +280,9 @@ void handle_v2_multiclaim(ethPluginProvideParameter_t *msg, context_t *context) 
                 return;
             }
 
-            params->current_item_count -= 1;
+            if (params->current_item_count > 0) {
+                params->current_item_count -= 1;
+            }
             if (params->current_item_count == 0) {
                 context->next_param = V2_MULTICLAIM_TICKETIDS__ITEM_LENGTH;
             }
@@ -308,9 +316,13 @@ void handle_v2_multiclaim(ethPluginProvideParameter_t *msg, context_t *context) 
             break;
         }
         case V2_MULTICLAIM_TICKETIDS__ITEM__ITEMS:
-            params->current_item_count -= 1;
+            if (params->current_item_count > 0) {
+                params->current_item_count -= 1;
+            }
             if (params->current_item_count == 0) {
-                params->parent_item_count -= 1;
+                if (params->parent_item_count > 0) {
+                    params->parent_item_count -= 1;
+                }
                 if (params->parent_item_count == 0) {
                     // we check the checksums
                     if (memcmp(params->checksum_preview,
@@ -379,7 +391,9 @@ void handle_v2_multiclaim(ethPluginProvideParameter_t *msg, context_t *context) 
                 return;
             }
 
-            params->current_item_count -= 1;
+            if (params->current_item_count > 0) {
+                params->current_item_count -= 1;
+            }
             if (params->current_item_count == 0) {
                 context->next_param = V2_MULTICLAIM_CASKIDS__ITEM_LENGTH;
             }
@@ -414,8 +428,14 @@ void handle_v2_multiclaim(ethPluginProvideParameter_t *msg, context_t *context) 
             break;
         }
         case V2_MULTICLAIM_CASKIDS__ITEM__ITEMS:
-            params->current_item_count -= 1;
+            if (params->current_item_count > 0) {
+                params->current_item_count -= 1;
+            }
             if (params->current_item_count == 0) {
+                if (params->parent_item_count > 0) {
+                    params->parent_item_count -= 1;
+                }
+
                 if (params->parent_item_count == 0) {
                     // we check the checksums
                     if (memcmp(params->checksum_preview,
