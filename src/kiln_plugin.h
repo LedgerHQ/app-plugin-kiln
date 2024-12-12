@@ -236,13 +236,20 @@ typedef struct {
 } v2_request_exit_t;
 
 typedef struct {
-    uint16_t cask_ids_offset;
     // -- utils
+    uint16_t cask_ids_offset;
+
     uint16_t current_item_count;
 } v2_claim_t;
 
 typedef struct {
     // -- utils
+    uint16_t ticket_ids_offset;
+    uint16_t cask_ids_offset;
+    uint8_t checksum_preview[CX_KECCAK_256_SIZE];
+    uint8_t checksum_value[CX_KECCAK_256_SIZE];
+    uint32_t cached_offset;
+
     uint16_t parent_item_count;
     uint16_t current_item_count;
 } v2_multiclaim_t;
