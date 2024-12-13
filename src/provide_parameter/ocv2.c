@@ -95,7 +95,11 @@ void handle_v2_claim(ethPluginProvideParameter_t *msg, context_t *context) {
             break;
         case V2_CLAIM_TICKET_IDS_LENGTH:
             U2BE_from_parameter(msg->parameter, &params->current_item_count);
-            context->next_param = V2_CLAIM_TICKET_IDS__ITEMS;
+            if (params->current_item_count == 0) {
+                context->next_param = V2_CLAIM_CASK_IDS_LENGTH;
+            } else {
+                context->next_param = V2_CLAIM_TICKET_IDS__ITEMS;
+            }
             break;
         case V2_CLAIM_TICKET_IDS__ITEMS:
             if (params->current_item_count > 0) {
@@ -114,7 +118,11 @@ void handle_v2_claim(ethPluginProvideParameter_t *msg, context_t *context) {
                 return;
             }
             U2BE_from_parameter(msg->parameter, &params->current_item_count);
-            context->next_param = V2_CLAIM_CASK_IDS__ITEMS;
+            if (params->current_item_count == 0) {
+                context->next_param = V2_CLAIM_UNEXPECTED_PARAMETER;
+            } else {
+                context->next_param = V2_CLAIM_CASK_IDS__ITEMS;
+            }
             break;
         case V2_CLAIM_CASK_IDS__ITEMS:
             if (params->current_item_count > 0) {
@@ -198,7 +206,11 @@ void handle_v2_multiclaim(ethPluginProvideParameter_t *msg, context_t *context) 
             break;
         case V2_MULTICLAIM_EXIT_QUEUES_LENGTH:
             U2BE_from_parameter(msg->parameter, &params->current_item_count);
-            context->next_param = V2_MULTICLAIM_EXIT_QUEUES__ITEMS;
+            if (params->current_item_count == 0) {
+                context->next_param = V2_MULTICLAIM_TICKETIDS_LENGTH;
+            } else {
+                context->next_param = V2_MULTICLAIM_EXIT_QUEUES__ITEMS;
+            }
             break;
         case V2_MULTICLAIM_EXIT_QUEUES__ITEMS: {
             uint8_t buffer[ADDRESS_LENGTH];
@@ -243,8 +255,11 @@ void handle_v2_multiclaim(ethPluginProvideParameter_t *msg, context_t *context) 
 
             U2BE_from_parameter(msg->parameter, &params->parent_item_count);
             params->current_item_count = params->parent_item_count;
-
-            context->next_param = V2_MULTICLAIM_TICKETIDS__OFFSET_ITEMS;
+            if (params->current_item_count == 0) {
+                context->next_param = V2_MULTICLAIM_TICKETIDS__ITEM_LENGTH;
+            } else {
+                context->next_param = V2_MULTICLAIM_TICKETIDS__OFFSET_ITEMS;
+            }
             break;
         // ********************************************************************
         // TICKETIDS[][]
@@ -312,7 +327,11 @@ void handle_v2_multiclaim(ethPluginProvideParameter_t *msg, context_t *context) 
             }
 
             U2BE_from_parameter(msg->parameter, &params->current_item_count);
-            context->next_param = V2_MULTICLAIM_TICKETIDS__ITEM__ITEMS;
+            if (params->current_item_count == 0) {
+                context->next_param = V2_MULTICLAIM_CASKIDS_LENGTH;
+            } else {
+                context->next_param = V2_MULTICLAIM_TICKETIDS__ITEM__ITEMS;
+            }
             break;
         }
         case V2_MULTICLAIM_TICKETIDS__ITEM__ITEMS:
@@ -358,7 +377,11 @@ void handle_v2_multiclaim(ethPluginProvideParameter_t *msg, context_t *context) 
 
             U2BE_from_parameter(msg->parameter, &params->parent_item_count);
             params->current_item_count = params->parent_item_count;
-            context->next_param = V2_MULTICLAIM_CASKIDS__OFFSET_ITEMS;
+            if (params->current_item_count == 0) {
+                context->next_param = V2_MULTICLAIM_CASKIDS__ITEM_LENGTH;
+            } else {
+                context->next_param = V2_MULTICLAIM_CASKIDS__OFFSET_ITEMS;
+            }
             break;
         case V2_MULTICLAIM_CASKIDS__OFFSET_ITEMS: {
             uint16_t offset;
@@ -424,7 +447,11 @@ void handle_v2_multiclaim(ethPluginProvideParameter_t *msg, context_t *context) 
             }
 
             U2BE_from_parameter(msg->parameter, &params->current_item_count);
-            context->next_param = V2_MULTICLAIM_CASKIDS__ITEM__ITEMS;
+            if (params->current_item_count == 0) {
+                context->next_param = V2_MULTICLAIM_UNEXPECTED_PARAMETER;
+            } else {
+                context->next_param = V2_MULTICLAIM_CASKIDS__ITEM__ITEMS;
+            }
             break;
         }
         case V2_MULTICLAIM_CASKIDS__ITEM__ITEMS:

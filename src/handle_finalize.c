@@ -28,7 +28,7 @@ void handle_finalize(ethPluginFinalize_t *msg) {
         context->next_param != LR_QUEUE_WITHDRAWALS_UNEXPECTED_PARAMETER &&
         context->next_param != LRCQW_UNEXPECTED_PARAMETER &&
         context->next_param != LR_DELEGATE_TO_UNEXPECTED_PARAMETER) {
-        PRINTF("Parser did not complete\n");
+        PRINTF("Parser did not complete: next_param is %d\n", context->next_param);
         msg->result = ETH_PLUGIN_RESULT_ERROR;
         return;
     }

@@ -217,7 +217,11 @@ void handle_lr_queue_withdrawals(ethPluginProvideParameter_t *msg, context_t *co
         case LR_QUEUE_WITHDRAWALS_QWITHDRAWALS_LENGTH:
             U2BE_from_parameter(msg->parameter, &params->queued_withdrawals_count);
             params->current_item_count = params->queued_withdrawals_count;
-            context->next_param = LR_QUEUE_WITHDRAWALS__QWITHDRAWALS_STRUCT_OFFSET;
+            if (params->current_item_count == 0) {
+                context->next_param = LR_QUEUE_WITHDRAWALS_UNEXPECTED_PARAMETER;
+            } else {
+                context->next_param = LR_QUEUE_WITHDRAWALS__QWITHDRAWALS_STRUCT_OFFSET;
+            }
             break;
 
         // ********************************************************************
@@ -391,7 +395,22 @@ void handle_lr_queue_withdrawals(ethPluginProvideParameter_t *msg, context_t *co
             // get number of items to parse
             U2BE_from_parameter(msg->parameter, &params->current_item_count);
 
-            context->next_param = LR_QUEUE_WITHDRAWALS__QWITHDRAWALS__SHARES_ITEM;
+            if (params->current_item_count == 0) {
+                // here we arrive at the end of the queuedWithdrawal array element
+
+                // check if there are other queuedWithdrawals to parse
+                params->queued_withdrawals_count -= 1;
+                if (params->queued_withdrawals_count == 0) {
+                    // if not we finished parsing
+                    context->next_param = LR_QUEUE_WITHDRAWALS_UNEXPECTED_PARAMETER;
+                } else {
+                    // if there are other queuedWithdrawals we go back to parsing the
+                    // next queueWithdrawal struct
+                    context->next_param = LR_QUEUE_WITHDRAWALS__QWITHDRAWALS_STRATEGIES_OFFSET;
+                }
+            } else {
+                context->next_param = LR_QUEUE_WITHDRAWALS__QWITHDRAWALS__SHARES_ITEM;
+            }
             break;
         case LR_QUEUE_WITHDRAWALS__QWITHDRAWALS__SHARES_ITEM:
             // we skip parsing shares item as they are not needed for clearsigning
@@ -1132,9 +1151,9 @@ void handle_lr_delegate_to(ethPluginProvideParameter_t *msg, context_t *context)
             break;
         case LR_DELEGATE_TO_SIGNATURE_SIG_ITEMS:
             // we skip parsing signature items as they are not needed for clearsigning
-
-            params->current_item_count -= 1;
-            if (params->current_item_count == 0) {
+            if (params->current_item_count >= PARAMETER_LENGTH) {
+                params->current_item_count -= PARAMETER_LENGTH;
+            } else {
                 context->next_param = LR_DELEGATE_TO_UNEXPECTED_PARAMETER;
             }
             break;

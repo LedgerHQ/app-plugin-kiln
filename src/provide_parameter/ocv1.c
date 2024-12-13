@@ -56,15 +56,16 @@ void handle_v1_withdraw_funcs(ethPluginProvideParameter_t *msg, context_t *conte
         }
         case V1_WFUNCS_BYTES_LENGTH:
             U2BE_from_parameter(msg->parameter, &params->current_item_count);
-            context->next_param = V1_WFUNCS_BYTES__ITEMS;
+            if (params->current_item_count == 0) {
+                context->next_param = V1_WFUNCS_UNEXPECTED_PARAMETER;
+            } else {
+                context->next_param = V1_WFUNCS_BYTES__ITEMS;
+            }
             break;
         case V1_WFUNCS_BYTES__ITEMS:
             if (params->current_item_count >= PARAMETER_LENGTH) {
                 params->current_item_count -= PARAMETER_LENGTH;
-                break;
-            }
-            // we reached the end of bytes to read
-            if (params->current_item_count < PARAMETER_LENGTH) {
+            } else {
                 context->next_param = V1_WFUNCS_UNEXPECTED_PARAMETER;
             }
             break;
