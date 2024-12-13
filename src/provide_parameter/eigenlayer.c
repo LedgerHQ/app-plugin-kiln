@@ -114,7 +114,7 @@ void handle_lr_deposit_into_strategy(ethPluginProvideParameter_t *msg, context_t
     // [ 68] amount
 
     uint8_t buffer[ADDRESS_LENGTH];
-    char address_buffer[ADDRESS_STR_LEN];
+    char address_buffer[ADDRESS_STR_LEN + 1];
 
     switch (context->next_param) {
         case LR_DEPOSIT_INTO_STRATEGY_STRATEGY:
@@ -323,7 +323,7 @@ void handle_lr_queue_withdrawals(ethPluginProvideParameter_t *msg, context_t *co
             {
                 uint8_t buffer[ADDRESS_LENGTH];
                 copy_address(buffer, msg->parameter, sizeof(buffer));
-                char address_buffer[ADDRESS_STR_LEN];
+                char address_buffer[ADDRESS_STR_LEN + 1];
                 getEthDisplayableAddress(buffer, address_buffer, sizeof(address_buffer), 0);
                 // we only support same withdrawer accross all the withdrawals
                 if (params->withdrawer[0] == '\0') {
@@ -372,7 +372,7 @@ void handle_lr_queue_withdrawals(ethPluginProvideParameter_t *msg, context_t *co
             {
                 uint8_t buffer[ADDRESS_LENGTH];
                 copy_address(buffer, msg->parameter, sizeof(buffer));
-                char address_buffer[ADDRESS_STR_LEN];
+                char address_buffer[ADDRESS_STR_LEN + 1];
                 getEthDisplayableAddress(buffer, address_buffer, sizeof(address_buffer), 0);
 
                 uint8_t strategy_index = find_lr_known_strategy(address_buffer);
@@ -718,7 +718,7 @@ void handle_lr_complete_queued_withdrawals(ethPluginProvideParameter_t *msg, con
             {
                 uint8_t buffer[ADDRESS_LENGTH];
                 copy_address(buffer, msg->parameter, sizeof(buffer));
-                char address_buffer[ADDRESS_STR_LEN];
+                char address_buffer[ADDRESS_STR_LEN + 1];
                 getEthDisplayableAddress(buffer, address_buffer, sizeof(address_buffer), 0);
 
                 uint8_t strategy_index = find_lr_known_strategy(address_buffer);
@@ -928,7 +928,7 @@ void handle_lr_complete_queued_withdrawals(ethPluginProvideParameter_t *msg, con
             {
                 uint8_t buffer[ADDRESS_LENGTH];
                 copy_address(buffer, msg->parameter, sizeof(buffer));
-                char address_buffer[ADDRESS_STR_LEN];
+                char address_buffer[ADDRESS_STR_LEN + 1];
                 getEthDisplayableAddress(buffer, address_buffer, sizeof(address_buffer), 0);
 
                 uint8_t token_index = find_lr_known_erc20(address_buffer);
@@ -1094,7 +1094,7 @@ void handle_lr_delegate_to(ethPluginProvideParameter_t *msg, context_t *context)
     switch (context->next_param) {
         case LR_DELEGATE_TO_OPERATOR: {
             {
-                uint8_t buffer[ADDRESS_LENGTH];
+                uint8_t buffer[ADDRESS_LENGTH + 1];
                 copy_address(buffer, msg->parameter, sizeof(buffer));
                 getEthDisplayableAddress(buffer,
                                          params->operator_address,

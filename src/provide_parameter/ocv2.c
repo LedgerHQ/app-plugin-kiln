@@ -215,7 +215,7 @@ void handle_v2_multiclaim(ethPluginProvideParameter_t *msg, context_t *context) 
         case V2_MULTICLAIM_EXIT_QUEUES__ITEMS: {
             uint8_t buffer[ADDRESS_LENGTH];
             copy_address(buffer, msg->parameter, sizeof(buffer));
-            char address_buffer[ADDRESS_STR_LEN];
+            char address_buffer[ADDRESS_STR_LEN + 1];
             getEthDisplayableAddress(buffer, address_buffer, sizeof(address_buffer), 0);
             // we add a check to make sure we know the exit queue addresses
             // that will be called in the multiclaim tx
