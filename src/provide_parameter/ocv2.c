@@ -256,7 +256,7 @@ void handle_v2_multiclaim(ethPluginProvideParameter_t *msg, context_t *context) 
             U2BE_from_parameter(msg->parameter, &params->parent_item_count);
             params->current_item_count = params->parent_item_count;
             if (params->current_item_count == 0) {
-                context->next_param = V2_MULTICLAIM_TICKETIDS__ITEM_LENGTH;
+                context->next_param = V2_MULTICLAIM_CASKIDS_LENGTH;
             } else {
                 context->next_param = V2_MULTICLAIM_TICKETIDS__OFFSET_ITEMS;
             }
@@ -328,7 +328,21 @@ void handle_v2_multiclaim(ethPluginProvideParameter_t *msg, context_t *context) 
 
             U2BE_from_parameter(msg->parameter, &params->current_item_count);
             if (params->current_item_count == 0) {
-                context->next_param = V2_MULTICLAIM_CASKIDS_LENGTH;
+                if (params->parent_item_count > 0) {
+                    params->parent_item_count -= 1;
+                }
+                if (params->parent_item_count == 0) {
+                    // we check the checksums
+                    if (memcmp(params->checksum_preview,
+                               params->checksum_value,
+                               sizeof(params->checksum_preview)) != 0) {
+                        PRINTF("Tokenids[][] checksums do not match\n");
+                        msg->result = ETH_PLUGIN_RESULT_ERROR;
+                        return;
+                    }
+
+                    context->next_param = V2_MULTICLAIM_CASKIDS_LENGTH;
+                }
             } else {
                 context->next_param = V2_MULTICLAIM_TICKETIDS__ITEM__ITEMS;
             }
@@ -378,7 +392,7 @@ void handle_v2_multiclaim(ethPluginProvideParameter_t *msg, context_t *context) 
             U2BE_from_parameter(msg->parameter, &params->parent_item_count);
             params->current_item_count = params->parent_item_count;
             if (params->current_item_count == 0) {
-                context->next_param = V2_MULTICLAIM_CASKIDS__ITEM_LENGTH;
+                context->next_param = V2_MULTICLAIM_UNEXPECTED_PARAMETER;
             } else {
                 context->next_param = V2_MULTICLAIM_CASKIDS__OFFSET_ITEMS;
             }
@@ -448,7 +462,22 @@ void handle_v2_multiclaim(ethPluginProvideParameter_t *msg, context_t *context) 
 
             U2BE_from_parameter(msg->parameter, &params->current_item_count);
             if (params->current_item_count == 0) {
-                context->next_param = V2_MULTICLAIM_UNEXPECTED_PARAMETER;
+                if (params->parent_item_count > 0) {
+                    params->parent_item_count -= 1;
+                }
+
+                if (params->parent_item_count == 0) {
+                    // we check the checksums
+                    if (memcmp(params->checksum_preview,
+                               params->checksum_value,
+                               sizeof(params->checksum_preview)) != 0) {
+                        PRINTF("Caskids[][] checksums do not match\n");
+                        msg->result = ETH_PLUGIN_RESULT_ERROR;
+                        return;
+                    }
+
+                    context->next_param = V2_MULTICLAIM_UNEXPECTED_PARAMETER;
+                }
             } else {
                 context->next_param = V2_MULTICLAIM_CASKIDS__ITEM__ITEMS;
             }
