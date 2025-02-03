@@ -102,6 +102,15 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
         case KILN_DEFI_REDEEM:
             context->next_param = DEFI_REDEEM_SHARES_AMOUNT;
             break;
+        case KILN_DEFI_APPROVE:
+            context->next_param = DEFI_APPROVE_SPENDER;
+            break;
+        case KILN_DEFI_TRANSFER:
+            context->next_param = DEFI_TRANSFER_TO;
+            break;
+        case KILN_DEFI_TRANSFER_FROM:
+            context->next_param = DEFI_TRANSFER_FROM_FROM;
+            break;
 
         default:
             PRINTF("Missing selectorIndex: %d\n", context->selectorIndex);

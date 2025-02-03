@@ -36,3 +36,6 @@ void handle_defi_deposit(ethPluginProvideParameter_t *msg, context_t *context);
 void handle_defi_mint(ethPluginProvideParameter_t *msg, context_t *context);
 void handle_defi_withdraw(ethPluginProvideParameter_t *msg, context_t *context);
 void handle_defi_redeem(ethPluginProvideParameter_t *msg, context_t *context);
+void handle_defi_approve(ethPluginProvideParameter_t *msg, context_t *context);
+void handle_defi_transfer(ethPluginProvideParameter_t *msg, context_t *context);
+void handle_defi_transfer_from(ethPluginProvideParameter_t *msg, context_t *context);
