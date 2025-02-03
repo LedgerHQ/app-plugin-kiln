@@ -20,6 +20,18 @@
                 "0xba087652": {
                     "method": "redeem",
                     "plugin": "Kiln"
+                },
+                "0x095ea7b3": {
+                    "method": "approve",
+                    "plugin": "Kiln"
+                },
+                "0xa9059cbb": {
+                    "method": "transfer",
+                    "plugin": "Kiln"
+                },
+                "0x23b872dd": {
+                    "method": "transferFrom",
+                    "plugin": "Kiln"
                 }
             }
         },
@@ -41,6 +53,18 @@
                 },
                 "0xba087652": {
                     "method": "redeem",
+                    "plugin": "Kiln"
+                },
+                "0x095ea7b3": {
+                    "method": "approve",
+                    "plugin": "Kiln"
+                },
+                "0xa9059cbb": {
+                    "method": "transfer",
+                    "plugin": "Kiln"
+                },
+                "0x23b872dd": {
+                    "method": "transferFrom",
                     "plugin": "Kiln"
                 }
             }
