@@ -8,25 +8,27 @@ import {
   nano_models,
   SPECULOS_ADDRESS,
   txFromEtherscan,
-} from '../test.fixture';
+} from './test.fixture';
 import { ethers } from 'ethers';
 import { parseEther, parseUnits } from 'ethers/lib/utils';
 import { ledgerService } from '@ledgerhq/hw-app-eth';
 
-const contractAddr = '0x39053d51b77dc0d36036fc1fcc8cb819df8ef37a'; // delegation manager
+const contractAddr = '0xca8f5dbc4c90678763b291217e6dddfca00341d0';
 
 const pluginName = 'Kiln';
-const abi_path = `../cal/ethereum/abis/${contractAddr}.json`;
+const abi_path = `../cal/arbitrum/abis/${contractAddr}.json`;
 const abi = require(abi_path);
 
 nano_models.forEach(function (model) {
   test(
-    '[Nano ' + model.letter + '] LR Undelegate',
+    '[Nano ' + model.letter + '] DEFI TransferFrom ERC20',
     zemu(model, async (sim, eth) => {
       const contract = new ethers.Contract(contractAddr, abi);
 
-      const { data } = await contract.populateTransaction.undelegate(
-        '0x645a845f80576a25f1b412330a108780f6c4573d'
+      const { data } = await contract.populateTransaction.transferFrom(
+        '0x5db5235b5c7e247488784986e58019fffd98fda4',
+        '0x1e68238ce926dec62b3fbc99ab06eb1d85ce0270',
+        42000000
       );
 
       let unsignedTx = genericTx;
@@ -46,12 +48,12 @@ nano_models.forEach(function (model) {
         }
       );
       const tx = eth.signTransaction("44'/60'/0'/0", serializedTx, resolution);
-      const right_clicks = model.letter === 'S' ? 4 : 4;
+      const right_clicks = 11;
 
       await waitForAppScreen(sim);
       await sim.navigateAndCompareSnapshots(
         '.',
-        model.name + '_lr_undelegate',
+        model.name + '_defi_transfer_from',
         [right_clicks, 0]
       );
       await tx;

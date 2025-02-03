@@ -2,40 +2,39 @@ import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import {
   waitForAppScreen,
+  kilnJSON,
   zemu,
   genericTx,
   nano_models,
   SPECULOS_ADDRESS,
   txFromEtherscan,
-} from '../test.fixture';
+} from './test.fixture';
 import { ethers } from 'ethers';
 import { parseEther, parseUnits } from 'ethers/lib/utils';
 import { ledgerService } from '@ledgerhq/hw-app-eth';
 
-const contractAddr = '0x1e68238ce926dec62b3fbc99ab06eb1d85ce0270';
+const contractAddr = '0xca8f5dbc4c90678763b291217e6dddfca00341d0';
 
 const pluginName = 'Kiln';
-const abi_path = `../cal/ethereum/abis/${contractAddr}.json`;
+const abi_path = `../cal/arbitrum/abis/${contractAddr}.json`;
 const abi = require(abi_path);
 
 nano_models.forEach(function (model) {
   test(
-    '[Nano ' + model.letter + '] BatchWithdrawEL',
+    '[Nano ' + model.letter + '] DEFI Deposit ERC20',
     zemu(model, async (sim, eth) => {
       const contract = new ethers.Contract(contractAddr, abi);
 
-      const pubkeys =
-        '0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb';
-
-      const { data } = await contract.populateTransaction.batchWithdrawELFee(
-        pubkeys
+      const { data } = await contract.populateTransaction.deposit(
+        42000000,
+        '0x5db5235b5c7e247488784986e58019fffd98fda4'
       );
 
       let unsignedTx = genericTx;
 
-      unsignedTx.value = 0;
       unsignedTx.to = contractAddr;
       unsignedTx.data = data;
+      unsignedTx.value = parseEther('0');
 
       const serializedTx = ethers.utils
         .serializeTransaction(unsignedTx)
@@ -48,18 +47,15 @@ nano_models.forEach(function (model) {
         }
       );
       const tx = eth.signTransaction("44'/60'/0'/0", serializedTx, resolution);
-      const right_clicks = 4;
+      const right_clicks = 8;
 
       await waitForAppScreen(sim);
-
-      await sim.navigateAndCompareSnapshots(
-        '.',
-        model.name + '_batchWithdrawEL',
-        [right_clicks, 0]
-      );
-
+      await sim.navigateAndCompareSnapshots('.', model.name + '_defi_deposit', [
+        right_clicks,
+        0,
+      ]);
       await tx;
     }),
-    15000
+    30000
   );
 });

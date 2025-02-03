@@ -95,6 +95,18 @@ void handle_query_contract_ui(ethQueryContractUI_t *msg) {
             ret = defi_redeem_ui(msg, context);
             break;
 
+        case KILN_DEFI_APPROVE:
+            ret = defi_approve_ui(msg, context);
+            break;
+
+        case KILN_DEFI_TRANSFER:
+            ret = defi_transfer_ui(msg, context);
+            break;
+
+        case KILN_DEFI_TRANSFER_FROM:
+            ret = defi_transfer_from_ui(msg, context);
+            break;
+
         default:
             PRINTF("Selector Index not supported: %d\n", context->selectorIndex);
             break;
