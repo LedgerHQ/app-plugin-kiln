@@ -48,7 +48,7 @@ nano_models.forEach(function (model) {
         }
       );
       const tx = eth.signTransaction("44'/60'/0'/0", serializedTx, resolution);
-      const right_clicks = 6;
+      const right_clicks = 11;
 
       await waitForAppScreen(sim);
       await sim.navigateAndCompareSnapshots('.', model.name + '_defi_redeem', [

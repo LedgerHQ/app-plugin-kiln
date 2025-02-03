@@ -98,6 +98,19 @@ void handle_finalize(ethPluginFinalize_t *msg) {
             msg->result = ETH_PLUGIN_RESULT_OK;
             break;
 
+        case KILN_DEFI_APPROVE:
+            msg->numScreens = 2;
+            msg->result = ETH_PLUGIN_RESULT_OK;
+            break;
+        case KILN_DEFI_TRANSFER:
+            msg->numScreens = 2;
+            msg->result = ETH_PLUGIN_RESULT_OK;
+            break;
+        case KILN_DEFI_TRANSFER_FROM:
+            msg->numScreens = 3;
+            msg->result = ETH_PLUGIN_RESULT_OK;
+            break;
+
         default:
             PRINTF("Selector Index not supported: %d\n", context->selectorIndex);
             msg->result = ETH_PLUGIN_RESULT_ERROR;

@@ -65,6 +65,12 @@ static const uint32_t KILN_DEFI_MINT_SELECTOR = 0x94bf804d;
 static const uint32_t KILN_DEFI_WITHDRAW_SELECTOR = 0xb460af94;
 // --- cast sig "redeem(uint256,address,address)"
 static const uint32_t KILN_DEFI_REDEEM_SELECTOR = 0xba087652;
+// --- cast sig "approve(address,uint256)"
+static const uint32_t KILN_DEFI_APPROVE_SELECTOR = 0x095ea7b3;
+// --- cast sig "transfer(address,uint256)"
+static const uint32_t KILN_DEFI_TRANSFER_SELECTOR = 0xa9059cbb;
+// -- cast sig "transferFrom(address,address,uint256)"
+static const uint32_t KILN_DEFI_TRANSFER_FROM_SELECTOR = 0x23b872dd;
 
 const char ocv2_exit_queues[OCV2_MAX_EXIT_QUEUES][ADDRESS_STR_LEN] = {
     "0x8d6Fd650500f82c7D978a440348e5a9b886943bF",  // Kiln
@@ -140,4 +146,7 @@ const uint32_t KILN_SELECTORS[NUM_SELECTORS] = {
     KILN_DEFI_MINT_SELECTOR,
     KILN_DEFI_WITHDRAW_SELECTOR,
     KILN_DEFI_REDEEM_SELECTOR,
+    KILN_DEFI_APPROVE_SELECTOR,
+    KILN_DEFI_TRANSFER_SELECTOR,
+    KILN_DEFI_TRANSFER_FROM_SELECTOR,
 };

@@ -61,8 +61,11 @@
 // --- 18. mint(uint256,address)
 // --- 19. withdraw(uint256,address,address)
 // --- 20. redeem(uint256,address,address)
+// --- 21. approve(address,uint256)
+// --- 22. transfer(address,uint256)
+// --- 23. transferFrom(address,address,uint256)
 //
-#define NUM_SELECTORS 21
+#define NUM_SELECTORS 24
 extern const uint32_t KILN_SELECTORS[NUM_SELECTORS];
 
 // Selectors available (see mapping above).
@@ -88,6 +91,9 @@ typedef enum {
     KILN_DEFI_MINT,
     KILN_DEFI_WITHDRAW,
     KILN_DEFI_REDEEM,
+    KILN_DEFI_APPROVE,
+    KILN_DEFI_TRANSFER,
+    KILN_DEFI_TRANSFER_FROM,
 } selector_t;
 
 // ****************************************************************************
@@ -372,6 +378,25 @@ typedef enum {
     DEFI_REDEEM_OWNER_ADDRESS,
 } defi_redeem_parameters;
 
+typedef enum {
+    DEFI_APPROVE_UNEXPECTED_PARAMETER = 0,
+    DEFI_APPROVE_SPENDER,
+    DEFI_APPROVE_AMOUNT,
+} defi_approve_parameters;
+
+typedef enum {
+    DEFI_TRANSFER_UNEXPECTED_PARAMETER = 0,
+    DEFI_TRANSFER_TO,
+    DEFI_TRANSFER_AMOUNT,
+} defi_transfer_parameters;
+
+typedef enum {
+    DEFI_TRANSFER_FROM_UNEXPECTED_PARAMETER = 0,
+    DEFI_TRANSFER_FROM_FROM,
+    DEFI_TRANSFER_FROM_TO,
+    DEFI_TRANSFER_FROM_AMOUNT,
+} defi_transfer_from_parameters;
+
 // ****************************************************************************
 
 typedef struct {
@@ -396,6 +421,22 @@ typedef struct {
     char owner_address[ADDRESS_STR_LEN];
 } defi_redeem_t;
 
+typedef struct {
+    char spender[ADDRESS_STR_LEN];
+    uint8_t amount[INT256_LENGTH];
+} defi_approve_t;
+
+typedef struct {
+    char to[ADDRESS_STR_LEN];
+    uint8_t amount[INT256_LENGTH];
+} defi_transfer_t;
+
+typedef struct {
+    char from[ADDRESS_STR_LEN];
+    char to[ADDRESS_STR_LEN];
+    uint8_t amount[INT256_LENGTH];
+} defi_transfer_from_t;
+
 // ****************************************************************************
 // * SHARED PLUGIN CONTEXT MEMORY
 // ****************************************************************************
@@ -419,6 +460,9 @@ typedef struct context_t {
         defi_mint_t defi_mint;
         defi_withdraw_t defi_withdraw;
         defi_redeem_t defi_redeem;
+        defi_approve_t defi_approve;
+        defi_transfer_t defi_transfer;
+        defi_transfer_from_t defi_transfer_from;
     } param_data;
 
     selector_t selectorIndex;

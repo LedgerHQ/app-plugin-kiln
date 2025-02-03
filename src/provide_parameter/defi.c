@@ -187,3 +187,116 @@ void handle_defi_redeem(ethPluginProvideParameter_t *msg, context_t *context) {
     }
     msg->result = ETH_PLUGIN_RESULT_OK;
 }
+
+void handle_defi_approve(ethPluginProvideParameter_t *msg, context_t *context) {
+    // **************************************************************************
+    // FUNCTION TO PARSE
+    // **************************************************************************
+    //
+    // function approve(address spender, uint256 amount)
+    //
+    // **************************************************************************
+    // example
+    // [0] selector
+    // [4] spender
+    // [36] amount
+    // **************************************************************************
+    defi_approve_t *params = &context->param_data.defi_approve;
+
+    switch (context->next_param) {
+        case DEFI_APPROVE_SPENDER: {
+            uint8_t buffer[ADDRESS_LENGTH];
+            copy_address(buffer, msg->parameter, sizeof(buffer));
+            getEthDisplayableAddress(buffer, params->spender, sizeof(params->spender), 0);
+            context->next_param = DEFI_APPROVE_AMOUNT;
+            break;
+        }
+        case DEFI_APPROVE_AMOUNT:
+            copy_parameter(params->amount, msg->parameter, sizeof(params->amount));
+            context->next_param = DEFI_APPROVE_UNEXPECTED_PARAMETER;
+            break;
+        default:
+            PRINTF("Param not supported: %d\n", context->next_param);
+            msg->result = ETH_PLUGIN_RESULT_ERROR;
+            return;
+    }
+    msg->result = ETH_PLUGIN_RESULT_OK;
+}
+
+void handle_defi_transfer(ethPluginProvideParameter_t *msg, context_t *context) {
+    // **************************************************************************
+    // FUNCTION TO PARSE
+    // **************************************************************************
+    //
+    // function transfer(address to, uint256 amount)
+    //
+    // **************************************************************************
+    // example
+    // [0] selector
+    // [4] to
+    // [36] amount
+    // **************************************************************************
+    defi_transfer_t *params = &context->param_data.defi_transfer;
+
+    switch (context->next_param) {
+        case DEFI_TRANSFER_TO: {
+            uint8_t buffer[ADDRESS_LENGTH];
+            copy_address(buffer, msg->parameter, sizeof(buffer));
+            getEthDisplayableAddress(buffer, params->to, sizeof(params->to), 0);
+            context->next_param = DEFI_TRANSFER_AMOUNT;
+            break;
+        }
+        case DEFI_TRANSFER_AMOUNT:
+            copy_parameter(params->amount, msg->parameter, sizeof(params->amount));
+            context->next_param = DEFI_TRANSFER_UNEXPECTED_PARAMETER;
+            break;
+        default:
+            PRINTF("Param not supported: %d\n", context->next_param);
+            msg->result = ETH_PLUGIN_RESULT_ERROR;
+            return;
+    }
+    msg->result = ETH_PLUGIN_RESULT_OK;
+}
+
+void handle_defi_transfer_from(ethPluginProvideParameter_t *msg, context_t *context) {
+    // **************************************************************************
+    // FUNCTION TO PARSE
+    // **************************************************************************
+    //
+    // function transferFrom(address from, address to, uint256 amount)
+    //
+    // **************************************************************************
+    // example
+    // [0] selector
+    // [4] from
+    // [36] to
+    // [68] amount
+    // **************************************************************************
+    defi_transfer_from_t *params = &context->param_data.defi_transfer_from;
+
+    switch (context->next_param) {
+        case DEFI_TRANSFER_FROM_FROM: {
+            uint8_t buffer[ADDRESS_LENGTH];
+            copy_address(buffer, msg->parameter, sizeof(buffer));
+            getEthDisplayableAddress(buffer, params->from, sizeof(params->from), 0);
+            context->next_param = DEFI_TRANSFER_FROM_TO;
+            break;
+        }
+        case DEFI_TRANSFER_FROM_TO: {
+            uint8_t buffer[ADDRESS_LENGTH];
+            copy_address(buffer, msg->parameter, sizeof(buffer));
+            getEthDisplayableAddress(buffer, params->to, sizeof(params->to), 0);
+            context->next_param = DEFI_TRANSFER_FROM_AMOUNT;
+            break;
+        }
+        case DEFI_TRANSFER_FROM_AMOUNT:
+            copy_parameter(params->amount, msg->parameter, sizeof(params->amount));
+            context->next_param = DEFI_TRANSFER_FROM_UNEXPECTED_PARAMETER;
+            break;
+        default:
+            PRINTF("Param not supported: %d\n", context->next_param);
+            msg->result = ETH_PLUGIN_RESULT_ERROR;
+            return;
+    }
+    msg->result = ETH_PLUGIN_RESULT_OK;
+}

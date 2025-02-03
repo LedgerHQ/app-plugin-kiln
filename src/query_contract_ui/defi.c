@@ -144,3 +144,89 @@ bool defi_redeem_ui(ethQueryContractUI_t *msg, context_t *context) {
     }
     return ret;
 }
+
+bool defi_approve_ui(ethQueryContractUI_t *msg, context_t *context) {
+    bool ret = false;
+    defi_approve_t *params = &context->param_data.defi_approve;
+
+    switch (msg->screenIndex) {
+        case 0:
+            strlcpy(msg->title, "DeFi", msg->titleLength);
+            strlcpy(msg->msg, "Approve", msg->msgLength);
+            ret = true;
+            break;
+        case 1:
+            strlcpy(msg->title, "Spender", msg->titleLength);
+            strlcpy(msg->msg, params->spender, msg->msgLength);
+            ret = true;
+            break;
+        case 2:
+            strlcpy(msg->title, "Amount", msg->titleLength);
+            uint256_to_decimal(params->amount, sizeof(params->amount), msg->msg, msg->msgLength);
+            ret = true;
+            break;
+        default:
+            PRINTF("Received an invalid screenIndex\n");
+            break;
+    }
+    return ret;
+}
+
+bool defi_transfer_ui(ethQueryContractUI_t *msg, context_t *context) {
+    bool ret = false;
+    defi_transfer_t *params = &context->param_data.defi_transfer;
+
+    switch (msg->screenIndex) {
+        case 0:
+            strlcpy(msg->title, "DeFi", msg->titleLength);
+            strlcpy(msg->msg, "Transfer", msg->msgLength);
+            ret = true;
+            break;
+        case 1:
+            strlcpy(msg->title, "To", msg->titleLength);
+            strlcpy(msg->msg, params->to, msg->msgLength);
+            ret = true;
+            break;
+        case 2:
+            strlcpy(msg->title, "Amount", msg->titleLength);
+            uint256_to_decimal(params->amount, sizeof(params->amount), msg->msg, msg->msgLength);
+            ret = true;
+            break;
+        default:
+            PRINTF("Received an invalid screenIndex\n");
+            break;
+    }
+    return ret;
+}
+
+bool defi_transfer_from_ui(ethQueryContractUI_t *msg, context_t *context) {
+    bool ret = false;
+    defi_transfer_from_t *params = &context->param_data.defi_transfer_from;
+
+    switch (msg->screenIndex) {
+        case 0:
+            strlcpy(msg->title, "DeFi", msg->titleLength);
+            strlcpy(msg->msg, "Transfer From", msg->msgLength);
+            ret = true;
+            break;
+        case 1:
+            strlcpy(msg->title, "From", msg->titleLength);
+            strlcpy(msg->msg, params->from, msg->msgLength);
+            ret = true;
+            break;
+        case 2:
+            strlcpy(msg->title, "To", msg->titleLength);
+            strlcpy(msg->msg, params->to, msg->msgLength);
+            ret = true;
+            break;
+        case 3:
+            strlcpy(msg->title, "Amount", msg->titleLength);
+            uint256_to_decimal(params->amount, sizeof(params->amount), msg->msg, msg->msgLength);
+            ret = true;
+            break;
+        default:
+            PRINTF("Received an invalid screenIndex\n");
+            break;
+    }
+    return ret;
+}
