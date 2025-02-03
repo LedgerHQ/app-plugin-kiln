@@ -27,13 +27,10 @@ bool defi_deposit_ui(ethQueryContractUI_t *msg, context_t *context) {
             break;
         case 1:
             strlcpy(msg->title, "Assets", msg->titleLength);
-
-            amountToString(params->assets_amount,
-                           sizeof(params->assets_amount),
-                           6,
-                           "USDC",  // TODO: fetch it somehow
-                           msg->msg,
-                           msg->msgLength);
+            uint256_to_decimal(params->assets_amount,
+                               sizeof(params->assets_amount),
+                               msg->msg,
+                               msg->msgLength);
             ret = true;
             break;
         case 2:
@@ -60,12 +57,10 @@ bool defi_mint_ui(ethQueryContractUI_t *msg, context_t *context) {
             break;
         case 1:
             strlcpy(msg->title, "Shares", msg->titleLength);
-            amountToString(params->shares_amount,
-                           sizeof(params->shares_amount),
-                           6,
-                           "SHARES",
-                           msg->msg,
-                           msg->msgLength);
+            uint256_to_decimal(params->shares_amount,
+                               sizeof(params->shares_amount),
+                               msg->msg,
+                               msg->msgLength);
             ret = true;
             break;
         case 2:
@@ -92,12 +87,10 @@ bool defi_withdraw_ui(ethQueryContractUI_t *msg, context_t *context) {
             break;
         case 1:
             strlcpy(msg->title, "Assets", msg->titleLength);
-            amountToString(params->assets_amount,
-                           sizeof(params->assets_amount),
-                           6,
-                           "USDC",  // TODO: fetch it somehow
-                           msg->msg,
-                           msg->msgLength);
+            uint256_to_decimal(params->assets_amount,
+                               sizeof(params->assets_amount),
+                               msg->msg,
+                               msg->msgLength);
             ret = true;
             break;
         case 2:
@@ -129,12 +122,10 @@ bool defi_redeem_ui(ethQueryContractUI_t *msg, context_t *context) {
             break;
         case 1:
             strlcpy(msg->title, "Shares", msg->titleLength);
-            amountToString(params->shares_amount,
-                           sizeof(params->shares_amount),
-                           6,
-                           "SHARES",
-                           msg->msg,
-                           msg->msgLength);
+            uint256_to_decimal(params->shares_amount,
+                               sizeof(params->shares_amount),
+                               msg->msg,
+                               msg->msgLength);
             ret = true;
             break;
         case 2:

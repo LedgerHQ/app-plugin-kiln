@@ -19,15 +19,7 @@ void handle_finalize(ethPluginFinalize_t *msg) {
     context_t *context = (context_t *) msg->pluginContext;
 
     // if any of the parsers did not complete, we return an error
-    if (context->next_param != V1_WFUNCS_UNEXPECTED_PARAMETER &&
-        context->next_param != V2_REQUEST_EXIT_UNEXPECTED_PARAMETER &&
-        context->next_param != V2_CLAIM_UNEXPECTED_PARAMETER &&
-        context->next_param != V2_MULTICLAIM_UNEXPECTED_PARAMETER &&
-        context->next_param != LR_UNDELEGATE_UNEXPECTED_PARAMETER &&
-        context->next_param != LR_DEPOSIT_INTO_STRATEGY_UNEXPECTED_PARAMETER &&
-        context->next_param != LR_QUEUE_WITHDRAWALS_UNEXPECTED_PARAMETER &&
-        context->next_param != LRCQW_UNEXPECTED_PARAMETER &&
-        context->next_param != LR_DELEGATE_TO_UNEXPECTED_PARAMETER) {
+    if (context->next_param != 0) {
         PRINTF("Parser did not complete: next_param is %d\n", context->next_param);
         msg->result = ETH_PLUGIN_RESULT_ERROR;
         return;
@@ -96,13 +88,13 @@ void handle_finalize(ethPluginFinalize_t *msg) {
 
         case KILN_DEFI_DEPOSIT:
         case KILN_DEFI_MINT:
-            msg->numScreens = 2;
+            msg->numScreens = 3;
             msg->result = ETH_PLUGIN_RESULT_OK;
             break;
 
         case KILN_DEFI_WITHDRAW:
         case KILN_DEFI_REDEEM:
-            msg->numScreens = 3;
+            msg->numScreens = 4;
             msg->result = ETH_PLUGIN_RESULT_OK;
             break;
 
