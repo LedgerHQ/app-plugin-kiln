@@ -41,6 +41,7 @@ void handle_defi_deposit(ethPluginProvideParameter_t *msg, context_t *context) {
             char address_buffer[ADDRESS_STR_LEN];
             getEthDisplayableAddress(buffer, address_buffer, sizeof(address_buffer), 0);
             memcpy(params->receiver_address, address_buffer, sizeof(params->receiver_address));
+            context->next_param = DEFI_DEPOSIT_UNEXPECTED_PARAMETER;
             break;
         }
         default:
@@ -78,6 +79,7 @@ void handle_defi_mint(ethPluginProvideParameter_t *msg, context_t *context) {
                                      params->receiver_address,
                                      sizeof(params->receiver_address),
                                      0);
+            context->next_param = DEFI_MINT_UNEXPECTED_PARAMETER;
             break;
         }
         default:
@@ -126,6 +128,7 @@ void handle_defi_withdraw(ethPluginProvideParameter_t *msg, context_t *context) 
                                      params->owner_address,
                                      sizeof(params->owner_address),
                                      0);
+            context->next_param = DEFI_WITHDRAW_UNEXPECTED_PARAMETER;
             break;
         }
         default:
@@ -174,6 +177,7 @@ void handle_defi_redeem(ethPluginProvideParameter_t *msg, context_t *context) {
                                      params->owner_address,
                                      sizeof(params->owner_address),
                                      0);
+            context->next_param = DEFI_REDEEM_UNEXPECTED_PARAMETER;
             break;
         }
         default:

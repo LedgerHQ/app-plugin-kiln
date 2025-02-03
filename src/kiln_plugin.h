@@ -392,7 +392,7 @@ typedef struct {
 
 typedef struct {
     uint8_t shares_amount[INT256_LENGTH];
-    char receiver_address[ADDRESS_LENGTH];
+    char receiver_address[ADDRESS_STR_LEN];
     char owner_address[ADDRESS_STR_LEN];
 } defi_redeem_t;
 
