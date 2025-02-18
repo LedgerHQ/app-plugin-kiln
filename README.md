@@ -308,7 +308,7 @@ struct QueuedWithdrawalParams {
     address[] strategies;
     uint256[] shares;
     address withdrawer;
-}
+
 
 function queueWithdrawals(
     QueuedWithdrawalParams[] queuedWithdrawalParams

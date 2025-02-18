@@ -1,4 +1,3 @@
-from web3 import Web3
 from tests.utils import run_test, load_contract
 
 contract_ocv1 = load_contract(
@@ -6,7 +5,7 @@ contract_ocv1 = load_contract(
 )
 
 # Test from https://etherscan.io/tx/0xea17de5f3cc81f6638c714a7be936e37d652c080c66f333df765fbe0760eaec2
-def test_stake(backend, firmware, navigator, test_name, wallet_addr):
+def test_ocv1_deposit(backend, firmware, navigator, test_name, wallet_addr):
     data = "0xd0e30db0"
     run_test(
         contract_ocv1, 
@@ -15,5 +14,6 @@ def test_stake(backend, firmware, navigator, test_name, wallet_addr):
         firmware, 
         navigator, 
         test_name, 
-        wallet_addr
+        wallet_addr,
+        value=32000000000000000000
     )
