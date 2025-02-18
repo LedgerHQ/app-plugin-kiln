@@ -1,0 +1,31 @@
+[
+    {
+        "inputs": [
+            {
+                "internalType": "address[]",
+                "name": "exitQueues",
+                "type": "address[]"
+            },
+            {
+                "internalType": "uint256[][]",
+                "name": "ticketIds",
+                "type": "uint256[][]"
+            },
+            {
+                "internalType": "uint32[][]",
+                "name": "casksIds",
+                "type": "uint32[][]"
+            }
+        ],
+        "name": "multiClaim",
+        "outputs": [
+            {
+                "internalType": "enum IvExitQueue.ClaimStatus[][]",
+                "name": "statuses",
+                "type": "uint8[][]"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+]
