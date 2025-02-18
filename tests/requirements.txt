@@ -1,0 +1,3 @@
+ledger_app_clients.ethereum
+pytest
+ragger[speculos,ledgercomm]
