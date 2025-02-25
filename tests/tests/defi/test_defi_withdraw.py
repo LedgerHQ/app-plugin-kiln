@@ -1,5 +1,7 @@
 from tests.utils import run_test, load_contract
+from eth_typing import ChainId
 
+CHAIN_ID = ChainId.BNB
 vault_contract = load_contract(
     "0x4d1806c26a728f2e1b82b4549b9e074dbe5940b9"
 )
@@ -15,5 +17,6 @@ def test_defi_redeem(backend, firmware, navigator, test_name, wallet_addr):
         navigator, 
         test_name, 
         wallet_addr,
+        chain_id=CHAIN_ID,
         value=0
     )

@@ -26,14 +26,21 @@ bool defi_deposit_ui(ethQueryContractUI_t *msg, context_t *context) {
             ret = true;
             break;
         case 1:
-            strlcpy(msg->title, "Assets", msg->titleLength);
-            uint256_to_decimal(params->assets_amount,
-                               sizeof(params->assets_amount),
-                               msg->msg,
-                               msg->msgLength);
+            strlcpy(msg->title, "On", msg->titleLength);
+            strlcpy(msg->msg, defi_vaults_names[params->vault_index], msg->msgLength);
             ret = true;
             break;
         case 2:
+            strlcpy(msg->title, "Assets", msg->titleLength);
+            amountToString(params->assets_amount,
+                           sizeof(params->assets_amount),
+                           defi_assets_decimals[params->vault_index],
+                           defi_assets_names[params->vault_index],
+                           msg->msg,
+                           msg->msgLength);
+            ret = true;
+            break;
+        case 3:
             strlcpy(msg->title, "Receiver", msg->titleLength);
             strlcpy(msg->msg, params->receiver_address, msg->msgLength);
             ret = true;
@@ -56,14 +63,21 @@ bool defi_mint_ui(ethQueryContractUI_t *msg, context_t *context) {
             ret = true;
             break;
         case 1:
-            strlcpy(msg->title, "Shares", msg->titleLength);
-            uint256_to_decimal(params->shares_amount,
-                               sizeof(params->shares_amount),
-                               msg->msg,
-                               msg->msgLength);
+            strlcpy(msg->title, "On", msg->titleLength);
+            strlcpy(msg->msg, defi_vaults_names[params->vault_index], msg->msgLength);
             ret = true;
             break;
         case 2:
+            strlcpy(msg->title, "Shares", msg->titleLength);
+            amountToString(params->shares_amount,
+                           sizeof(params->shares_amount),
+                           defi_shares_decimals[params->vault_index],
+                           defi_shares_names[params->vault_index],
+                           msg->msg,
+                           msg->msgLength);
+            ret = true;
+            break;
+        case 3:
             strlcpy(msg->title, "Receiver", msg->titleLength);
             strlcpy(msg->msg, params->receiver_address, msg->msgLength);
             ret = true;
@@ -86,19 +100,26 @@ bool defi_withdraw_ui(ethQueryContractUI_t *msg, context_t *context) {
             ret = true;
             break;
         case 1:
-            strlcpy(msg->title, "Assets", msg->titleLength);
-            uint256_to_decimal(params->assets_amount,
-                               sizeof(params->assets_amount),
-                               msg->msg,
-                               msg->msgLength);
+            strlcpy(msg->title, "On", msg->titleLength);
+            strlcpy(msg->msg, defi_vaults_names[params->vault_index], msg->msgLength);
             ret = true;
             break;
         case 2:
+            strlcpy(msg->title, "Assets", msg->titleLength);
+            amountToString(params->assets_amount,
+                           sizeof(params->assets_amount),
+                           defi_assets_decimals[params->vault_index],
+                           defi_assets_names[params->vault_index],
+                           msg->msg,
+                           msg->msgLength);
+            ret = true;
+            break;
+        case 3:
             strlcpy(msg->title, "Receiver", msg->titleLength);
             strlcpy(msg->msg, params->receiver_address, msg->msgLength);
             ret = true;
             break;
-        case 3:
+        case 4:
             strlcpy(msg->title, "Owner", msg->titleLength);
             strlcpy(msg->msg, params->owner_address, msg->msgLength);
             ret = true;
@@ -121,19 +142,26 @@ bool defi_redeem_ui(ethQueryContractUI_t *msg, context_t *context) {
             ret = true;
             break;
         case 1:
-            strlcpy(msg->title, "Shares", msg->titleLength);
-            uint256_to_decimal(params->shares_amount,
-                               sizeof(params->shares_amount),
-                               msg->msg,
-                               msg->msgLength);
+            strlcpy(msg->title, "On", msg->titleLength);
+            strlcpy(msg->msg, defi_vaults_names[params->vault_index], msg->msgLength);
             ret = true;
             break;
         case 2:
+            strlcpy(msg->title, "Shares", msg->titleLength);
+            amountToString(params->shares_amount,
+                           sizeof(params->shares_amount),
+                           defi_shares_decimals[params->vault_index],
+                           defi_shares_names[params->vault_index],
+                           msg->msg,
+                           msg->msgLength);
+            ret = true;
+            break;
+        case 3:
             strlcpy(msg->title, "Receiver", msg->titleLength);
             strlcpy(msg->msg, params->receiver_address, msg->msgLength);
             ret = true;
             break;
-        case 3:
+        case 4:
             strlcpy(msg->title, "Owner", msg->titleLength);
             strlcpy(msg->msg, params->owner_address, msg->msgLength);
             ret = true;
@@ -156,13 +184,23 @@ bool defi_approve_ui(ethQueryContractUI_t *msg, context_t *context) {
             ret = true;
             break;
         case 1:
+            strlcpy(msg->title, "On", msg->titleLength);
+            strlcpy(msg->msg, defi_vaults_names[params->vault_index], msg->msgLength);
+            ret = true;
+            break;
+        case 2:
             strlcpy(msg->title, "Spender", msg->titleLength);
             strlcpy(msg->msg, params->spender, msg->msgLength);
             ret = true;
             break;
-        case 2:
+        case 3:
             strlcpy(msg->title, "Amount", msg->titleLength);
-            uint256_to_decimal(params->amount, sizeof(params->amount), msg->msg, msg->msgLength);
+            amountToString(params->amount,
+                           sizeof(params->amount),
+                           defi_shares_decimals[params->vault_index],
+                           defi_shares_names[params->vault_index],
+                           msg->msg,
+                           msg->msgLength);
             ret = true;
             break;
         default:
@@ -183,13 +221,23 @@ bool defi_transfer_ui(ethQueryContractUI_t *msg, context_t *context) {
             ret = true;
             break;
         case 1:
+            strlcpy(msg->title, "On", msg->titleLength);
+            strlcpy(msg->msg, defi_vaults_names[params->vault_index], msg->msgLength);
+            ret = true;
+            break;
+        case 2:
             strlcpy(msg->title, "To", msg->titleLength);
             strlcpy(msg->msg, params->to, msg->msgLength);
             ret = true;
             break;
-        case 2:
+        case 3:
             strlcpy(msg->title, "Amount", msg->titleLength);
-            uint256_to_decimal(params->amount, sizeof(params->amount), msg->msg, msg->msgLength);
+            amountToString(params->amount,
+                           sizeof(params->amount),
+                           defi_shares_decimals[params->vault_index],
+                           defi_shares_names[params->vault_index],
+                           msg->msg,
+                           msg->msgLength);
             ret = true;
             break;
         default:
@@ -210,18 +258,28 @@ bool defi_transfer_from_ui(ethQueryContractUI_t *msg, context_t *context) {
             ret = true;
             break;
         case 1:
+            strlcpy(msg->title, "On", msg->titleLength);
+            strlcpy(msg->msg, defi_vaults_names[params->vault_index], msg->msgLength);
+            ret = true;
+            break;
+        case 2:
             strlcpy(msg->title, "From", msg->titleLength);
             strlcpy(msg->msg, params->from, msg->msgLength);
             ret = true;
             break;
-        case 2:
+        case 3:
             strlcpy(msg->title, "To", msg->titleLength);
             strlcpy(msg->msg, params->to, msg->msgLength);
             ret = true;
             break;
-        case 3:
+        case 4:
             strlcpy(msg->title, "Amount", msg->titleLength);
-            uint256_to_decimal(params->amount, sizeof(params->amount), msg->msg, msg->msgLength);
+            amountToString(params->amount,
+                           sizeof(params->amount),
+                           defi_shares_decimals[params->vault_index],
+                           defi_shares_names[params->vault_index],
+                           msg->msg,
+                           msg->msgLength);
             ret = true;
             break;
         default:

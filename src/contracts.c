@@ -119,6 +119,53 @@ const char lr_tickers[LR_STRATEGIES_COUNT][MAX_TICKER_LEN] = {"cbETH",
 
 const char lr_kiln_operator_address[ADDRESS_STR_LEN] = "0x1f8C8b1d78d01bCc42ebdd34Fae60181bD697662";
 
+// ****************************************************************************
+// For DeFi, there is no way to get the 4626 asset() address in the kiln plugin
+// because it is not passed in the calldata cf ERC4626 standard interface.
+// To counter this, we have to hardcode the address and ticker of the asset()
+// of each Kiln DeFi 4626 vault.
+// ----------------------------------------------------------------------------
+// for the following 7 arrays, indexes are always matching.
+
+const char defi_vaults_addresses[DEFI_VAULTS_COUNT][ADDRESS_STR_LEN] = {
+    "0x03441c89e7b751bb570f9dc8c92702b127c52c51",
+    "0x6f15cda2d68b00311614294a2b9b17400636133c",
+    "0x4d1806c26a728f2e1b82b4549b9e074dbe5940b9"};
+
+const uint defi_vaults_chainids[DEFI_VAULTS_COUNT] = {
+    137,
+    137,
+    56};
+
+const char defi_vaults_names[DEFI_VAULTS_COUNT][ADDRESS_STR_LEN] = {
+    "Cool Wallet AAVEv3 USDT",
+    "BITNOVO AAVE v3 USDC",
+    "Cool Wallet AAVEv3 USDT"};
+
+
+const char defi_shares_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN] = {
+    "cwAaveUSDT",
+    "cwAaveUSDC",
+    "cwAaveUSDT"};
+
+const uint8_t defi_shares_decimals[DEFI_VAULTS_COUNT] = {
+    6,
+    6,
+    6};
+
+const char defi_assets_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN] = {
+    "USDT",
+    "USDC",
+    "USDT"
+};
+
+const uint8_t defi_assets_decimals[DEFI_VAULTS_COUNT] = {
+    6,
+    6,
+    6};
+
+// ****************************************************************************
+
 // Array of all supported selectors.
 const uint32_t KILN_SELECTORS[NUM_SELECTORS] = {
     // V1
