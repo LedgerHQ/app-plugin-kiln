@@ -88,26 +88,25 @@ void handle_finalize(ethPluginFinalize_t *msg) {
 
         case KILN_DEFI_DEPOSIT:
         case KILN_DEFI_MINT:
-            msg->numScreens = 3;
-            msg->result = ETH_PLUGIN_RESULT_OK;
+            msg->numScreens = 4;
             break;
 
         case KILN_DEFI_WITHDRAW:
         case KILN_DEFI_REDEEM:
-            msg->numScreens = 4;
+            msg->numScreens = 5;
             msg->result = ETH_PLUGIN_RESULT_OK;
             break;
 
         case KILN_DEFI_APPROVE:
-            msg->numScreens = 2;
+            msg->numScreens = 4;
             msg->result = ETH_PLUGIN_RESULT_OK;
             break;
         case KILN_DEFI_TRANSFER:
-            msg->numScreens = 2;
+            msg->numScreens = 4;
             msg->result = ETH_PLUGIN_RESULT_OK;
             break;
         case KILN_DEFI_TRANSFER_FROM:
-            msg->numScreens = 3;
+            msg->numScreens = 5;
             msg->result = ETH_PLUGIN_RESULT_OK;
             break;
 

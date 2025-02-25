@@ -109,12 +109,21 @@ typedef enum {
 #define ERC20_DECIMALS                      18
 #define PARAM_OFFSET                        32
 #define OCV2_MAX_EXIT_QUEUES                2
+#define DEFI_VAULTS_COUNT                   3
+#define UNKNOWN_DEFI_VAULT                  100  // must be > DEFI_VAULTS_COUNT < 4
 
 extern const char ocv2_exit_queues[OCV2_MAX_EXIT_QUEUES][ADDRESS_STR_LEN];
 extern const char lr_strategy_addresses[LR_STRATEGIES_COUNT][ADDRESS_STR_LEN];
 extern const char lr_erc20_addresses[LR_STRATEGIES_COUNT][ADDRESS_STR_LEN];
 extern const char lr_tickers[LR_STRATEGIES_COUNT][MAX_TICKER_LEN];
 extern const char lr_kiln_operator_address[ADDRESS_STR_LEN];
+extern const char defi_vaults_addresses[DEFI_VAULTS_COUNT][ADDRESS_STR_LEN];
+extern const char defi_vaults_names[DEFI_VAULTS_COUNT][ADDRESS_STR_LEN];
+extern const char defi_shares_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN];
+extern const uint8_t defi_shares_decimals[DEFI_VAULTS_COUNT];
+extern const char defi_assets_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN];
+extern const uint8_t defi_assets_decimals[DEFI_VAULTS_COUNT];
+extern const uint defi_vaults_chainids[DEFI_VAULTS_COUNT];
 
 // ****************************************************************************
 
@@ -402,39 +411,46 @@ typedef enum {
 typedef struct {
     uint8_t assets_amount[INT256_LENGTH];
     char receiver_address[ADDRESS_STR_LEN];
+    uint8_t vault_index;
 } defi_deposit_t;
 
 typedef struct {
     uint8_t shares_amount[INT256_LENGTH];
     char receiver_address[ADDRESS_STR_LEN];
+    uint8_t vault_index;
 } defi_mint_t;
 
 typedef struct {
     uint8_t assets_amount[INT256_LENGTH];
     char receiver_address[ADDRESS_LENGTH];
     char owner_address[ADDRESS_STR_LEN];
+    uint8_t vault_index;
 } defi_withdraw_t;
 
 typedef struct {
     uint8_t shares_amount[INT256_LENGTH];
     char receiver_address[ADDRESS_STR_LEN];
     char owner_address[ADDRESS_STR_LEN];
+    uint8_t vault_index;
 } defi_redeem_t;
 
 typedef struct {
     char spender[ADDRESS_STR_LEN];
     uint8_t amount[INT256_LENGTH];
+    uint8_t vault_index;
 } defi_approve_t;
 
 typedef struct {
     char to[ADDRESS_STR_LEN];
     uint8_t amount[INT256_LENGTH];
+    uint8_t vault_index;
 } defi_transfer_t;
 
 typedef struct {
     char from[ADDRESS_STR_LEN];
     char to[ADDRESS_STR_LEN];
     uint8_t amount[INT256_LENGTH];
+    uint8_t vault_index;
 } defi_transfer_from_t;
 
 // ****************************************************************************

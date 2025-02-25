@@ -15,6 +15,26 @@
 
 #include "kiln_plugin.h"
 
+uint8_t get_vault_index(ethPluginProvideParameter_t *msg) {
+    char to_address[ADDRESS_STR_LEN];
+    getEthDisplayableAddress(msg->pluginSharedRO->txContent->destination,
+                             to_address,
+                             sizeof(to_address),
+                             0);
+
+    for (uint8_t i = 0; i < DEFI_VAULTS_COUNT; i += 1) {
+        if (memcmp(msg->pluginSharedRO->txContent->destination,
+                   defi_vaults_addresses[i],
+                   ADDRESS_STR_LEN) == 0) {
+            if (U2BE(msg->pluginSharedRO->txContent->chainID.value, 32) ==
+                defi_vaults_chainids[i]) {
+                return i;
+            }
+        }
+    }
+    return UNKNOWN_DEFI_VAULT;
+}
+
 void handle_defi_deposit(ethPluginProvideParameter_t *msg, context_t *context) {
     // **************************************************************************
     // FUNCTION TO PARSE
@@ -32,6 +52,12 @@ void handle_defi_deposit(ethPluginProvideParameter_t *msg, context_t *context) {
 
     switch (context->next_param) {
         case DEFI_DEPOSIT_ASSETS_AMOUNT:
+            params->vault_index = get_vault_index(msg);
+            if (params->vault_index == UNKNOWN_DEFI_VAULT) {
+                PRINTF("Vault not supported\n");
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+                return;
+            }
             copy_parameter(params->assets_amount, msg->parameter, sizeof(params->assets_amount));
             context->next_param = DEFI_DEPOSIT_RECEIVER_ADDRESS;
             break;
@@ -69,6 +95,12 @@ void handle_defi_mint(ethPluginProvideParameter_t *msg, context_t *context) {
 
     switch (context->next_param) {
         case DEFI_MINT_SHARES_AMOUNT:
+            params->vault_index = get_vault_index(msg);
+            if (params->vault_index == UNKNOWN_DEFI_VAULT) {
+                PRINTF("Vault not supported\n");
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+                return;
+            }
             copy_parameter(params->shares_amount, msg->parameter, sizeof(params->shares_amount));
             context->next_param = DEFI_MINT_RECEIVER_ADDRESS;
             break;
@@ -108,6 +140,12 @@ void handle_defi_withdraw(ethPluginProvideParameter_t *msg, context_t *context) 
 
     switch (context->next_param) {
         case DEFI_WITHDRAW_ASSETS_AMOUNT:
+            params->vault_index = get_vault_index(msg);
+            if (params->vault_index == UNKNOWN_DEFI_VAULT) {
+                PRINTF("Vault not supported\n");
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+                return;
+            }
             copy_parameter(params->assets_amount, msg->parameter, sizeof(params->assets_amount));
             context->next_param = DEFI_WITHDRAW_RECEIVER_ADDRESS;
             break;
@@ -157,6 +195,12 @@ void handle_defi_redeem(ethPluginProvideParameter_t *msg, context_t *context) {
 
     switch (context->next_param) {
         case DEFI_REDEEM_SHARES_AMOUNT:
+            params->vault_index = get_vault_index(msg);
+            if (params->vault_index == UNKNOWN_DEFI_VAULT) {
+                PRINTF("Vault not supported\n");
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+                return;
+            }
             copy_parameter(params->shares_amount, msg->parameter, sizeof(params->shares_amount));
             context->next_param = DEFI_REDEEM_RECEIVER_ADDRESS;
             break;
@@ -205,6 +249,12 @@ void handle_defi_approve(ethPluginProvideParameter_t *msg, context_t *context) {
 
     switch (context->next_param) {
         case DEFI_APPROVE_SPENDER: {
+            params->vault_index = get_vault_index(msg);
+            if (params->vault_index == UNKNOWN_DEFI_VAULT) {
+                PRINTF("Vault not supported\n");
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+                return;
+            }
             uint8_t buffer[ADDRESS_LENGTH];
             copy_address(buffer, msg->parameter, sizeof(buffer));
             getEthDisplayableAddress(buffer, params->spender, sizeof(params->spender), 0);
@@ -240,6 +290,12 @@ void handle_defi_transfer(ethPluginProvideParameter_t *msg, context_t *context) 
 
     switch (context->next_param) {
         case DEFI_TRANSFER_TO: {
+            params->vault_index = get_vault_index(msg);
+            if (params->vault_index == UNKNOWN_DEFI_VAULT) {
+                PRINTF("Vault not supported\n");
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+                return;
+            }
             uint8_t buffer[ADDRESS_LENGTH];
             copy_address(buffer, msg->parameter, sizeof(buffer));
             getEthDisplayableAddress(buffer, params->to, sizeof(params->to), 0);
@@ -276,6 +332,12 @@ void handle_defi_transfer_from(ethPluginProvideParameter_t *msg, context_t *cont
 
     switch (context->next_param) {
         case DEFI_TRANSFER_FROM_FROM: {
+            params->vault_index = get_vault_index(msg);
+            if (params->vault_index == UNKNOWN_DEFI_VAULT) {
+                PRINTF("Vault not supported\n");
+                msg->result = ETH_PLUGIN_RESULT_ERROR;
+                return;
+            }
             uint8_t buffer[ADDRESS_LENGTH];
             copy_address(buffer, msg->parameter, sizeof(buffer));
             getEthDisplayableAddress(buffer, params->from, sizeof(params->from), 0);
