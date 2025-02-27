@@ -79,6 +79,15 @@ void handle_provide_parameter(ethPluginProvideParameter_t *msg) {
         case KILN_DEFI_REDEEM:
             handle_defi_redeem(msg, context);
             break;
+        case KILN_DEFI_APPROVE:
+            handle_defi_approve(msg, context);
+            break;
+        case KILN_DEFI_TRANSFER:
+            handle_defi_transfer(msg, context);
+            break;
+        case KILN_DEFI_TRANSFER_FROM:
+            handle_defi_transfer_from(msg, context);
+            break;
 
         default:
             PRINTF("Selector Index not supported: %d\n", context->selectorIndex);

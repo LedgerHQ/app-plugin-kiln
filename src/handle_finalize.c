@@ -89,6 +89,7 @@ void handle_finalize(ethPluginFinalize_t *msg) {
         case KILN_DEFI_DEPOSIT:
         case KILN_DEFI_MINT:
             msg->numScreens = 4;
+            msg->result = ETH_PLUGIN_RESULT_OK;
             break;
 
         case KILN_DEFI_WITHDRAW:

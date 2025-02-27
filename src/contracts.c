@@ -125,17 +125,14 @@ const char lr_kiln_operator_address[ADDRESS_STR_LEN] = "0x1f8C8b1d78d01bCc42ebdd
 // To counter this, we have to hardcode the address and ticker of the asset()
 // of each Kiln DeFi 4626 vault.
 // ----------------------------------------------------------------------------
-// for the following 7 arrays, indexes are always matching.
+// for the following 6 arrays, indexes are always matching.
 
+// note: we do not check chain ids because we trust the manifest of the app to do it
+// and the deployer of the contract to not deploy on similar addresses cross chain.
 const char defi_vaults_addresses[DEFI_VAULTS_COUNT][ADDRESS_STR_LEN] = {
-    "0x03441c89e7b751bb570f9dc8c92702b127c52c51",
-    "0x6f15cda2d68b00311614294a2b9b17400636133c",
-    "0x4d1806c26a728f2e1b82b4549b9e074dbe5940b9"};
-
-const uint defi_vaults_chainids[DEFI_VAULTS_COUNT] = {
-    137,
-    137,
-    56};
+    "0x03441c89e7B751bb570f9Dc8C92702b127c52C51",
+    "0x6f15CDA2D68B00311614294A2b9b17400636133C",
+    "0x4d1806C26A728f2e1b82b4549b9E074DBE5940B9"};
 
 const char defi_vaults_names[DEFI_VAULTS_COUNT][ADDRESS_STR_LEN] = {
     "Cool Wallet AAVEv3 USDT",

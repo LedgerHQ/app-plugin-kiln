@@ -23,13 +23,8 @@ uint8_t get_vault_index(ethPluginProvideParameter_t *msg) {
                              0);
 
     for (uint8_t i = 0; i < DEFI_VAULTS_COUNT; i += 1) {
-        if (memcmp(msg->pluginSharedRO->txContent->destination,
-                   defi_vaults_addresses[i],
-                   ADDRESS_STR_LEN) == 0) {
-            if (U2BE(msg->pluginSharedRO->txContent->chainID.value, 32) ==
-                defi_vaults_chainids[i]) {
-                return i;
-            }
+        if (memcmp(to_address, defi_vaults_addresses[i], ADDRESS_STR_LEN) == 0) {
+            return i;
         }
     }
     return UNKNOWN_DEFI_VAULT;

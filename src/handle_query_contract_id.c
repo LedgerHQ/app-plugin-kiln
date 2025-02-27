@@ -53,6 +53,9 @@ void handle_query_contract_id(ethQueryContractID_t *msg) {
         case KILN_DEFI_MINT:
         case KILN_DEFI_WITHDRAW:
         case KILN_DEFI_REDEEM:
+        case KILN_DEFI_APPROVE:
+        case KILN_DEFI_TRANSFER:
+        case KILN_DEFI_TRANSFER_FROM:
             strlcpy(msg->version, "DeFi", msg->versionLength);
             break;
 
