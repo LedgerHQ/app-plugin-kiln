@@ -146,9 +146,9 @@ const char defi_shares_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN] = {
     "cwAaveUSDT"};
 
 const uint8_t defi_shares_decimals[DEFI_VAULTS_COUNT] = {
+    18,
     6,
-    6,
-    6};
+    18};
 
 const char defi_assets_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN] = {
     "USDT",
@@ -157,9 +157,9 @@ const char defi_assets_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN] = {
 };
 
 const uint8_t defi_assets_decimals[DEFI_VAULTS_COUNT] = {
+    18,
     6,
-    6,
-    6};
+    18};
 
 // ****************************************************************************
 
