@@ -21,12 +21,12 @@ bool defi_deposit_ui(ethQueryContractUI_t *msg, context_t *context) {
 
     switch (msg->screenIndex) {
         case 0:
-            strlcpy(msg->title, "DeFi", msg->titleLength);
+            strlcpy(msg->title, "Operation", msg->titleLength);
             strlcpy(msg->msg, "Deposit", msg->msgLength);
             ret = true;
             break;
         case 1:
-            strlcpy(msg->title, "On", msg->titleLength);
+            strlcpy(msg->title, "Strategy", msg->titleLength);
             strlcpy(msg->msg, defi_vaults_names[params->vault_index], msg->msgLength);
             ret = true;
             break;
@@ -58,12 +58,12 @@ bool defi_mint_ui(ethQueryContractUI_t *msg, context_t *context) {
 
     switch (msg->screenIndex) {
         case 0:
-            strlcpy(msg->title, "DeFi", msg->titleLength);
+            strlcpy(msg->title, "Operation", msg->titleLength);
             strlcpy(msg->msg, "Mint", msg->msgLength);
             ret = true;
             break;
         case 1:
-            strlcpy(msg->title, "On", msg->titleLength);
+            strlcpy(msg->title, "Strategy", msg->titleLength);
             strlcpy(msg->msg, defi_vaults_names[params->vault_index], msg->msgLength);
             ret = true;
             break;
@@ -95,12 +95,12 @@ bool defi_withdraw_ui(ethQueryContractUI_t *msg, context_t *context) {
 
     switch (msg->screenIndex) {
         case 0:
-            strlcpy(msg->title, "DeFi", msg->titleLength);
+            strlcpy(msg->title, "Operation", msg->titleLength);
             strlcpy(msg->msg, "Withdraw", msg->msgLength);
             ret = true;
             break;
         case 1:
-            strlcpy(msg->title, "On", msg->titleLength);
+            strlcpy(msg->title, "Strategy", msg->titleLength);
             strlcpy(msg->msg, defi_vaults_names[params->vault_index], msg->msgLength);
             ret = true;
             break;
@@ -137,12 +137,12 @@ bool defi_redeem_ui(ethQueryContractUI_t *msg, context_t *context) {
 
     switch (msg->screenIndex) {
         case 0:
-            strlcpy(msg->title, "DeFi", msg->titleLength);
+            strlcpy(msg->title, "Operation", msg->titleLength);
             strlcpy(msg->msg, "Redeem", msg->msgLength);
             ret = true;
             break;
         case 1:
-            strlcpy(msg->title, "On", msg->titleLength);
+            strlcpy(msg->title, "Strategy", msg->titleLength);
             strlcpy(msg->msg, defi_vaults_names[params->vault_index], msg->msgLength);
             ret = true;
             break;
@@ -179,12 +179,12 @@ bool defi_approve_ui(ethQueryContractUI_t *msg, context_t *context) {
 
     switch (msg->screenIndex) {
         case 0:
-            strlcpy(msg->title, "DeFi", msg->titleLength);
+            strlcpy(msg->title, "Operation", msg->titleLength);
             strlcpy(msg->msg, "Approve", msg->msgLength);
             ret = true;
             break;
         case 1:
-            strlcpy(msg->title, "On", msg->titleLength);
+            strlcpy(msg->title, "Strategy", msg->titleLength);
             strlcpy(msg->msg, defi_vaults_names[params->vault_index], msg->msgLength);
             ret = true;
             break;
@@ -216,12 +216,12 @@ bool defi_transfer_ui(ethQueryContractUI_t *msg, context_t *context) {
 
     switch (msg->screenIndex) {
         case 0:
-            strlcpy(msg->title, "DeFi", msg->titleLength);
+            strlcpy(msg->title, "Operation", msg->titleLength);
             strlcpy(msg->msg, "Transfer", msg->msgLength);
             ret = true;
             break;
         case 1:
-            strlcpy(msg->title, "On", msg->titleLength);
+            strlcpy(msg->title, "Strategy", msg->titleLength);
             strlcpy(msg->msg, defi_vaults_names[params->vault_index], msg->msgLength);
             ret = true;
             break;
@@ -253,12 +253,12 @@ bool defi_transfer_from_ui(ethQueryContractUI_t *msg, context_t *context) {
 
     switch (msg->screenIndex) {
         case 0:
-            strlcpy(msg->title, "DeFi", msg->titleLength);
+            strlcpy(msg->title, "Operation", msg->titleLength);
             strlcpy(msg->msg, "Transfer From", msg->msgLength);
             ret = true;
             break;
         case 1:
-            strlcpy(msg->title, "On", msg->titleLength);
+            strlcpy(msg->title, "Strategy", msg->titleLength);
             strlcpy(msg->msg, defi_vaults_names[params->vault_index], msg->msgLength);
             ret = true;
             break;

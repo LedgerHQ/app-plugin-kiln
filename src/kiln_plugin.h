@@ -422,7 +422,7 @@ typedef struct {
 
 typedef struct {
     uint8_t assets_amount[INT256_LENGTH];
-    char receiver_address[ADDRESS_LENGTH];
+    char receiver_address[ADDRESS_STR_LEN];
     char owner_address[ADDRESS_STR_LEN];
     uint8_t vault_index;
 } defi_withdraw_t;
