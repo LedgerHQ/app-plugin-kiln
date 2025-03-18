@@ -129,6 +129,9 @@ const char lr_kiln_operator_address[ADDRESS_STR_LEN] = "0x1f8C8b1d78d01bCc42ebdd
 
 // note: we do not check chain ids because we trust the manifest of the app to do it
 // and the deployer of the contract to not deploy on similar addresses cross chain.
+
+// TODO: THESE ARE PLACEHOLDER CONTRACTS WAITING FOR LEDGER DEPLOYMENTS. WILL
+// BE REPLACED WITH REAL ADDRESSES ONCE DEPLOYED AND REVIEWED BY AUDITORS.
 const char defi_vaults_addresses[DEFI_VAULTS_COUNT][ADDRESS_STR_LEN] = {
     "0x03441c89e7B751bb570f9Dc8C92702b127c52C51",
     "0x6f15CDA2D68B00311614294A2b9b17400636133C",
