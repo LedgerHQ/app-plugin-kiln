@@ -134,32 +134,19 @@ const char defi_vaults_addresses[DEFI_VAULTS_COUNT][ADDRESS_STR_LEN] = {
     "0x6f15CDA2D68B00311614294A2b9b17400636133C",
     "0x4d1806C26A728f2e1b82b4549b9E074DBE5940B9"};
 
-const char defi_vaults_names[DEFI_VAULTS_COUNT][ADDRESS_STR_LEN] = {
-    "Cool Wallet AAVEv3 USDT",
-    "BITNOVO AAVE v3 USDC",
-    "Cool Wallet AAVEv3 USDT"};
+const char defi_vaults_names[DEFI_VAULTS_COUNT][ADDRESS_STR_LEN] = {"Cool Wallet AAVEv3 USDT",
+                                                                    "BITNOVO AAVE v3 USDC",
+                                                                    "Cool Wallet AAVEv3 USDT"};
 
+const char defi_shares_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN] = {"cwAaveUSDT",
+                                                                   "cwAaveUSDC",
+                                                                   "cwAaveUSDT"};
 
-const char defi_shares_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN] = {
-    "cwAaveUSDT",
-    "cwAaveUSDC",
-    "cwAaveUSDT"};
+const uint8_t defi_shares_decimals[DEFI_VAULTS_COUNT] = {18, 6, 18};
 
-const uint8_t defi_shares_decimals[DEFI_VAULTS_COUNT] = {
-    18,
-    6,
-    18};
+const char defi_assets_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN] = {"USDT", "USDC", "USDT"};
 
-const char defi_assets_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN] = {
-    "USDT",
-    "USDC",
-    "USDT"
-};
-
-const uint8_t defi_assets_decimals[DEFI_VAULTS_COUNT] = {
-    18,
-    6,
-    18};
+const uint8_t defi_assets_decimals[DEFI_VAULTS_COUNT] = {18, 6, 18};
 
 // ****************************************************************************
 
