@@ -271,7 +271,7 @@ Clearsigned:
 
 Shares are confusing for users and would be hard to store properly on the device for display.
 
-![](/tests/snapshots/nanosp/test_lr_queue_withdrawls/00000.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawls/00001.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawls/00002.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawls/00003.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawls/00004.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawls/00005.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawls/00006.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawls/00007.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawls/00008.png)
+![](/tests/snapshots/nanosp/test_lr_queue_withdrawals/00000.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawals/00001.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawals/00002.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawals/00003.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawals/00004.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawals/00005.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawals/00006.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawals/00007.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawals/00008.png)
 
 ### EigenLayer Strategy Manager - LR Complete Queued Withdrawals
 
