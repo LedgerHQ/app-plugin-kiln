@@ -10,21 +10,6 @@
 This plug-in is compatible with Nano S / X / SP devices, it enables to
 interact in a secure way with the Kiln On-Chain v1, v2, EigenLayer Liquid Restaking contracts, and DeFi vault contracts.
 
-## Prerequisite
-
-Clone the plugin to a new folder.
-
-```shell
-git clone https://github.com/LedgerHQ/app-plugin-kiln.git
-```
-
-Then in the same folder clone two more repositories, which is the plugin-tools and app-ethereum.
-
-```shell
-git clone https://github.com/LedgerHQ/plugin-tools.git                          #plugin-tools
-git clone --recurse-submodules https://github.com/LedgerHQ/app-ethereum.git     #app-ethereum
-```
-
 ## Documentation
 
 ### Plugin codebase
@@ -65,19 +50,14 @@ Each parser is a state machine that receives 32 bytes of data at a time (abi for
 
 ### Build
 
-Go to the plugin-tools folder and run the "./start" script.
-
 ```shell
-cd plugin-tools  # go to plugin folder
-./start.sh       # run the script start.sh
-```
-
-The script will build a docker image and attach a console.
-When the docker image is running go to the "app-plugin-kiln" folder and build the ".elf" files.
-
-```shell
-cd app-plugin-kiln/tests        # go to the tests folder in app-plugin-kiln
-./build_local_test_elfs.sh      # run the script build_local_test_elfs.sh
+$ git clone --recurse-submodules https://github.com/kilnfi/app-plugin-kiln-v2.git
+$ cd app-plugin-kiln-v2/
+$ docker run --rm -it \
+    -v "$(realpath .):/app" \
+    --user $(id -u $USER):$(id -g $USER) \
+    ghcr.io/ledgerhq/ledger-app-builder/ledger-app-dev-tools:latest \
+    make
 ```
 
 ### Tests
