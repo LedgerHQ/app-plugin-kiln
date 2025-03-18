@@ -123,7 +123,6 @@ extern const char defi_shares_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN];
 extern const uint8_t defi_shares_decimals[DEFI_VAULTS_COUNT];
 extern const char defi_assets_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN];
 extern const uint8_t defi_assets_decimals[DEFI_VAULTS_COUNT];
-extern const uint defi_vaults_chainids[DEFI_VAULTS_COUNT];
 
 // ****************************************************************************
 
