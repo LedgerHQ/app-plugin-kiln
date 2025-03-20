@@ -130,26 +130,47 @@ const char lr_kiln_operator_address[ADDRESS_STR_LEN] = "0x1f8C8b1d78d01bCc42ebdd
 // note: we do not check chain ids because we trust the manifest of the app to do it
 // and the deployer of the contract to not deploy on similar addresses cross chain.
 
-// TODO: THESE ARE PLACEHOLDER CONTRACTS WAITING FOR LEDGER DEPLOYMENTS. WILL
-// BE REPLACED WITH REAL ADDRESSES ONCE DEPLOYED AND REVIEWED BY AUDITORS.
 const char defi_vaults_addresses[DEFI_VAULTS_COUNT][ADDRESS_STR_LEN] = {
-    "0x03441c89e7B751bb570f9Dc8C92702b127c52C51",
-    "0x6f15CDA2D68B00311614294A2b9b17400636133C",
-    "0x4d1806C26A728f2e1b82b4549b9E074DBE5940B9"};
+    "0x7DAEBa3F217614E409F85d3014D33923a6b03630",   // seUSDS
+    "0x4B20748c3Dd973f1456eccDE4FF84D54792dcD3e",   // aeUSDA
+    "0x96B22EB7178d116797e57197e586b70FedAE8Fdd",   // mstkeUSDT
+    "0x334F5d28a71432f8fc21C7B2B6F5dBbcD8B32A7b",   // mstkeUSDC
+    "0xB9E62Cb9b4cE8ec13c886FaE67369Da417EE2714",   // ceUSDC
+    "0xbd08C57f7448a5794bf4faeE067EC71AA64ef26D",   // seDAI
+    "0xD88714E295da03a07BcB8aD4a4dbE87fa42d75f9",   // aeUSDS
+    "0x4Ef971774c77865FF8Ec35f274474CB0eD9c48FA",   // aeDAI
+    "0xD2011d314aCAA68E5401E7f5AeC3Be6d2C574DCf",   // aeUSDC
+    "0x4D431856295413906075dD40266d83624E09C672"};  // aeUSDT
 
-const char defi_vaults_names[DEFI_VAULTS_COUNT][ADDRESS_STR_LEN] = {"Cool Wallet AAVEv3 USDT",
-                                                                    "BITNOVO AAVE v3 USDC",
-                                                                    "Cool Wallet AAVEv3 USDT"};
+const char defi_vaults_names[DEFI_VAULTS_COUNT][ADDRESS_STR_LEN] = {
+    "Yield Bearing Sky USDS",
+    "Yield Bearing Angle USDA",
+    "Yield Bearing Steakhouse Morpho USDT",
+    "Yield Bearing Steakhouse Morpho USDC",
+    "Yield Bearing Compound USDC",
+    "Yield Bearing Spark DAI",
+    "Yield Bearing AAVE USDS",
+    "Yield Bearing AAVE DAI",
+    "Yield Bearing AAVE USDC",
+    "Yield Bearing AAVE USDT"};
 
-const char defi_shares_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN] = {"cwAaveUSDT",
-                                                                   "cwAaveUSDC",
-                                                                   "cwAaveUSDT"};
+const char defi_shares_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN] = {"seUSDS",
+                                                                   "aeUSDA",
+                                                                   "mstkeUSDT",
+                                                                   "mstkeUSDC",
+                                                                   "ceUSDC",
+                                                                   "seDAI",
+                                                                   "aeUSDS",
+                                                                   "aeDAI",
+                                                                   "aeUSDC",
+                                                                   "aeUSDT"};
 
-const uint8_t defi_shares_decimals[DEFI_VAULTS_COUNT] = {18, 6, 18};
+const uint8_t defi_shares_decimals[DEFI_VAULTS_COUNT] = {18, 18, 18, 18, 18, 18, 18, 18, 18, 18};
 
-const char defi_assets_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN] = {"USDT", "USDC", "USDT"};
+const char defi_assets_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN] =
+    {"USDS", "USDA", "USDT", "USDC", "USDC", "DAI", "USDS", "DAI", "USDC", "USDT"};
 
-const uint8_t defi_assets_decimals[DEFI_VAULTS_COUNT] = {18, 6, 18};
+const uint8_t defi_assets_decimals[DEFI_VAULTS_COUNT] = {18, 18, 6, 6, 6, 18, 18, 18, 6, 6};
 
 // ****************************************************************************
 

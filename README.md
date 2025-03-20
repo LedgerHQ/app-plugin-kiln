@@ -90,9 +90,16 @@ Smart contracts covered by this plugin are:
 | Mainnet | Kiln On-Chain v2 ExitQueue    | `0x8d6fd650500f82c7d978a440348e5a9b886943bf` |
 | Mainnet | EigenLayer Strategy Manager   | `0x858646372cc42e1a627fce94aa7a7033e7cf075a` |
 | Mainnet | EigenLayer Delegation Manager | `0x39053d51b77dc0d36036fc1fcc8cb819df8ef37a` |
-| Mainnet | Cool Wallet AAVEv3 USDT       | `0x03441c89e7B751bb570f9Dc8C92702b127c52C51` |
-| Mainnet | BITNOVO AAVE v3 USDC          | `0x6f15CDA2D68B00311614294A2b9b17400636133C` |
-| Mainnet | Cool Wallet AAVEv3 USDT       | `0x4d1806C26A728f2e1b82b4549b9E074DBE5940B9` |
+| Mainnet | Yield Bearing Sky USDS               | `0x7DAEBa3F217614E409F85d3014D33923a6b03630` |
+| Mainnet | Yield Bearing Angle USDA              | `0x4B20748c3Dd973f1456eccDE4FF84D54792dcD3e` |
+| Mainnet | Yield Bearing Steakhouse Morpho USDT  | `0x96B22EB7178d116797e57197e586b70FedAE8Fdd` |
+| Mainnet | Yield Bearing Steakhouse Morpho USDC  | `0x334F5d28a71432f8fc21C7B2B6F5dBbcD8B32A7b` |
+| Mainnet | Yield Bearing Compound USDC           | `0xB9E62Cb9b4cE8ec13c886FaE67369Da417EE2714` |
+| Mainnet | Yield Bearing Spark DAI               | `0xbd08C57f7448a5794bf4faeE067EC71AA64ef26D` |
+| Mainnet | Yield Bearing AAVE USDS               | `0xD88714E295da03a07BcB8aD4a4dbE87fa42d75f9` |
+| Mainnet | Yield Bearing AAVE DAI                | `0x4Ef971774c77865FF8Ec35f274474CB0eD9c48FA` |
+| Mainnet | Yield Bearing AAVE USDC               | `0xD2011d314aCAA68E5401E7f5AeC3Be6d2C574DCf` |
+| Mainnet | Yield Bearing AAVE USDT               | `0x4D431856295413906075dD40266d83624E09C672` |
 
 ## Clearsigning
 

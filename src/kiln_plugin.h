@@ -109,7 +109,7 @@ typedef enum {
 #define ERC20_DECIMALS                      18
 #define PARAM_OFFSET                        32
 #define OCV2_MAX_EXIT_QUEUES                2
-#define DEFI_VAULTS_COUNT                   3
+#define DEFI_VAULTS_COUNT                   10
 #define UNKNOWN_DEFI_VAULT                  100  // must be > DEFI_VAULTS_COUNT < 4
 
 extern const char ocv2_exit_queues[OCV2_MAX_EXIT_QUEUES][ADDRESS_STR_LEN];
