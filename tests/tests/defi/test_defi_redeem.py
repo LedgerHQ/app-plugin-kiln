@@ -1,14 +1,14 @@
 from tests.utils import run_test, load_contract
 from eth_typing import ChainId
 
-CHAIN_ID = ChainId.BNB
+CHAIN_ID = ChainId.ETH
 vault_contract = load_contract(
-    "0x4d1806c26a728f2e1b82b4549b9e074dbe5940b9"
+    "0x7DAEBa3F217614E409F85d3014D33923a6b03630"  # seUSDS vault from contracts.c
 )
 
-# Test from https://bscscan.com/tx/0xc1a188556fb88e0fcb9f961648f94679f622ce86518d564fdb18440ef6de52e8
+# Test generated using cast calldata "redeem(uint256,address,address)" 1000000000000000000 0x7DAEBa3F217614E409F85d3014D33923a6b03630 0x7DAEBa3F217614E409F85d3014D33923a6b03630
 def test_defi_redeem(backend, firmware, navigator, test_name, wallet_addr):
-    data = "0xba08765200000000000000000000000000000000000000000000000ab299f7f182cfe2050000000000000000000000000fe00764bec32ffea3f4e4e057124c718c5b94280000000000000000000000000fe00764bec32ffea3f4e4e057124c718c5b9428"
+    data = "0xba0876520000000000000000000000000000000000000000000000000de0b6b3a76400000000000000000000000000007daeba3f217614e409f85d3014d33923a6b036300000000000000000000000007daeba3f217614e409f85d3014d33923a6b03630"
     run_test(
         vault_contract, 
         data, 
