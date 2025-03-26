@@ -8,7 +8,7 @@
  * ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝
  *
  * Kiln Ethereum Ledger App
- * (c) 2022-2024 Kiln
+ * (c) 2022-2025 Kiln
  *
  * contact@kiln.fi
  ********************************************************************************/
@@ -56,7 +56,16 @@
 // --- 15. delegateTo(address,(bytes,uint256),bytes32)
 // --- 16. undelegate(address)
 //
-#define NUM_SELECTORS 17
+// DEFI
+// --- 17. deposit(uint256,address)
+// --- 18. mint(uint256,address)
+// --- 19. withdraw(uint256,address,address)
+// --- 20. redeem(uint256,address,address)
+// --- 21. approve(address,uint256)
+// --- 22. transfer(address,uint256)
+// --- 23. transferFrom(address,address,uint256)
+//
+#define NUM_SELECTORS 24
 extern const uint32_t KILN_SELECTORS[NUM_SELECTORS];
 
 // Selectors available (see mapping above).
@@ -78,6 +87,13 @@ typedef enum {
     KILN_LR_COMPLETE_QUEUED_WITHDRAWALS,
     KILN_LR_DELEGATE_TO,
     KILN_LR_UNDELEGATE,
+    KILN_DEFI_DEPOSIT,
+    KILN_DEFI_MINT,
+    KILN_DEFI_WITHDRAW,
+    KILN_DEFI_REDEEM,
+    KILN_DEFI_APPROVE,
+    KILN_DEFI_TRANSFER,
+    KILN_DEFI_TRANSFER_FROM,
 } selector_t;
 
 // ****************************************************************************
@@ -92,15 +108,77 @@ typedef enum {
 #define MAX_DISPLAYABLE_LR_STRATEGIES_COUNT 32  // must be > LR_STRATEGIES_COUNT
 #define ERC20_DECIMALS                      18
 #define PARAM_OFFSET                        32
+#define OCV2_MAX_EXIT_QUEUES                2
+#define DEFI_VAULTS_COUNT                   10
+#define UNKNOWN_DEFI_VAULT                  100  // must be > DEFI_VAULTS_COUNT < 4
 
+extern const char ocv2_exit_queues[OCV2_MAX_EXIT_QUEUES][ADDRESS_STR_LEN];
 extern const char lr_strategy_addresses[LR_STRATEGIES_COUNT][ADDRESS_STR_LEN];
 extern const char lr_erc20_addresses[LR_STRATEGIES_COUNT][ADDRESS_STR_LEN];
 extern const char lr_tickers[LR_STRATEGIES_COUNT][MAX_TICKER_LEN];
 extern const char lr_kiln_operator_address[ADDRESS_STR_LEN];
+extern const char defi_vaults_addresses[DEFI_VAULTS_COUNT][ADDRESS_STR_LEN];
+extern const char defi_vaults_names[DEFI_VAULTS_COUNT][ADDRESS_STR_LEN];
+extern const char defi_shares_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN];
+extern const uint8_t defi_shares_decimals[DEFI_VAULTS_COUNT];
+extern const char defi_assets_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN];
+extern const uint8_t defi_assets_decimals[DEFI_VAULTS_COUNT];
 
 // ****************************************************************************
 
+// Parameters and state machines for OCV1 parsing
+
+typedef enum {
+    V1_WFUNCS_UNEXPECTED_PARAMETER = 0,
+    V1_WFUNCS_BYTES_OFFSET,
+    V1_WFUNCS_BYTES_LENGTH,
+    V1_WFUNCS_BYTES__ITEMS,
+} v1_withdraw_funcs_parameters;
+
+// Parameters and state machines for OCV2 parsing
+
+typedef enum {
+    V2_REQUEST_EXIT_UNEXPECTED_PARAMETER = 0,
+    V2_REQUEST_EXIT_AMOUNT,
+} v2_request_exit_parameters;
+
+typedef enum {
+    V2_CLAIM_UNEXPECTED_PARAMETER = 0,
+    V2_CLAIM_TICKET_IDS_OFFSET,
+    V2_CLAIM_CASK_IDS_OFFSET,
+    V2_CLAIM_MAX_CLAIM_DEPTH,
+    V2_CLAIM_TICKET_IDS_LENGTH,
+    V2_CLAIM_TICKET_IDS__ITEMS,
+    V2_CLAIM_CASK_IDS_LENGTH,
+    V2_CLAIM_CASK_IDS__ITEMS,
+} v2_claim;
+
+typedef enum {
+    V2_MULTICLAIM_UNEXPECTED_PARAMETER = 0,
+    V2_MULTICLAIM_EXIT_QUEUES_OFFSET,
+    V2_MULTICLAIM_TICKET_IDS_OFFSET,
+    V2_MULTICLAIM_CASK_IDS_OFFSET,
+
+    V2_MULTICLAIM_EXIT_QUEUES_LENGTH,
+    V2_MULTICLAIM_EXIT_QUEUES__ITEMS,
+
+    V2_MULTICLAIM_TICKETIDS_LENGTH,
+    V2_MULTICLAIM_TICKETIDS__OFFSET_ITEMS,
+    V2_MULTICLAIM_TICKETIDS__ITEM_LENGTH,
+    V2_MULTICLAIM_TICKETIDS__ITEM__ITEMS,
+
+    V2_MULTICLAIM_CASKIDS_LENGTH,
+    V2_MULTICLAIM_CASKIDS__OFFSET_ITEMS,
+    V2_MULTICLAIM_CASKIDS__ITEM_LENGTH,
+    V2_MULTICLAIM_CASKIDS__ITEM__ITEMS,
+} v2_multiclaim_parameters;
+
 // Parameters and state machines for EigenLayer parsing
+
+typedef enum {
+    LR_UNDELEGATE_UNEXPECTED_PARAMETER = 0,
+    LR_UNDELEGATE_ADDRESS,
+} lr_undelegate_parameters;
 
 typedef enum {
     LR_DEPOSIT_INTO_STRATEGY_UNEXPECTED_PARAMETER = 0,
@@ -172,6 +250,33 @@ typedef enum {
 // ****************************************************************************
 
 // Parsing structures
+
+typedef struct {
+    uint16_t current_item_count;
+} v1_withdraw_funcs_t;
+
+typedef struct {
+    uint8_t amount[INT256_LENGTH];
+} v2_request_exit_t;
+
+typedef struct {
+    // -- utils
+    uint16_t cask_ids_offset;
+
+    uint16_t current_item_count;
+} v2_claim_t;
+
+typedef struct {
+    // -- utils
+    uint16_t ticket_ids_offset;
+    uint16_t cask_ids_offset;
+    uint8_t checksum_preview[CX_KECCAK_256_SIZE];
+    uint8_t checksum_value[CX_KECCAK_256_SIZE];
+    uint32_t cached_offset;
+
+    uint16_t parent_item_count;
+    uint16_t current_item_count;
+} v2_multiclaim_t;
 
 typedef struct {
     int strategy_to_display;
@@ -252,18 +357,127 @@ typedef struct {
 } lr_complete_queued_withdrawals_t;
 
 // ****************************************************************************
+// * DEFI
+// ****************************************************************************
+
+typedef enum {
+    DEFI_DEPOSIT_UNEXPECTED_PARAMETER = 0,
+    DEFI_DEPOSIT_ASSETS_AMOUNT,
+    DEFI_DEPOSIT_RECEIVER_ADDRESS,
+} defi_deposit_parameters;
+
+typedef enum {
+    DEFI_MINT_UNEXPECTED_PARAMETER = 0,
+    DEFI_MINT_SHARES_AMOUNT,
+    DEFI_MINT_RECEIVER_ADDRESS,
+} defi_mint_parameters;
+
+typedef enum {
+    DEFI_WITHDRAW_UNEXPECTED_PARAMETER = 0,
+    DEFI_WITHDRAW_ASSETS_AMOUNT,
+    DEFI_WITHDRAW_RECEIVER_ADDRESS,
+    DEFI_WITHDRAW_OWNER_ADDRESS,
+} defi_withdraw_parameters;
+
+typedef enum {
+    DEFI_REDEEM_UNEXPECTED_PARAMETER = 0,
+    DEFI_REDEEM_SHARES_AMOUNT,
+    DEFI_REDEEM_RECEIVER_ADDRESS,
+    DEFI_REDEEM_OWNER_ADDRESS,
+} defi_redeem_parameters;
+
+typedef enum {
+    DEFI_APPROVE_UNEXPECTED_PARAMETER = 0,
+    DEFI_APPROVE_SPENDER,
+    DEFI_APPROVE_AMOUNT,
+} defi_approve_parameters;
+
+typedef enum {
+    DEFI_TRANSFER_UNEXPECTED_PARAMETER = 0,
+    DEFI_TRANSFER_TO,
+    DEFI_TRANSFER_AMOUNT,
+} defi_transfer_parameters;
+
+typedef enum {
+    DEFI_TRANSFER_FROM_UNEXPECTED_PARAMETER = 0,
+    DEFI_TRANSFER_FROM_FROM,
+    DEFI_TRANSFER_FROM_TO,
+    DEFI_TRANSFER_FROM_AMOUNT,
+} defi_transfer_from_parameters;
+
+// ****************************************************************************
+
+typedef struct {
+    uint8_t assets_amount[INT256_LENGTH];
+    char receiver_address[ADDRESS_STR_LEN];
+    uint8_t vault_index;
+} defi_deposit_t;
+
+typedef struct {
+    uint8_t shares_amount[INT256_LENGTH];
+    char receiver_address[ADDRESS_STR_LEN];
+    uint8_t vault_index;
+} defi_mint_t;
+
+typedef struct {
+    uint8_t assets_amount[INT256_LENGTH];
+    char receiver_address[ADDRESS_STR_LEN];
+    char owner_address[ADDRESS_STR_LEN];
+    uint8_t vault_index;
+} defi_withdraw_t;
+
+typedef struct {
+    uint8_t shares_amount[INT256_LENGTH];
+    char receiver_address[ADDRESS_STR_LEN];
+    char owner_address[ADDRESS_STR_LEN];
+    uint8_t vault_index;
+} defi_redeem_t;
+
+typedef struct {
+    char spender[ADDRESS_STR_LEN];
+    uint8_t amount[INT256_LENGTH];
+    uint8_t vault_index;
+} defi_approve_t;
+
+typedef struct {
+    char to[ADDRESS_STR_LEN];
+    uint8_t amount[INT256_LENGTH];
+    uint8_t vault_index;
+} defi_transfer_t;
+
+typedef struct {
+    char from[ADDRESS_STR_LEN];
+    char to[ADDRESS_STR_LEN];
+    uint8_t amount[INT256_LENGTH];
+    uint8_t vault_index;
+} defi_transfer_from_t;
+
+// ****************************************************************************
 // * SHARED PLUGIN CONTEXT MEMORY
 // ****************************************************************************
-// [100] receiveAsTokens_offset
 
 typedef struct context_t {
     uint8_t next_param;
 
     union {
+        v1_withdraw_funcs_t v1_withdraw_funcs;
+
+        v2_request_exit_t v2_request_exit;
+        v2_claim_t v2_claim;
+        v2_multiclaim_t v2_multiclaim;
+
         lr_deposit_t lr_deposit;
         lr_delegate_to_t lr_delegate_to;
         lr_queue_withdrawals_t lr_queue_withdrawals;
         lr_complete_queued_withdrawals_t lr_complete_queued_withdrawals;
+
+        defi_deposit_t defi_deposit;
+        defi_mint_t defi_mint;
+        defi_withdraw_t defi_withdraw;
+        defi_redeem_t defi_redeem;
+        defi_approve_t defi_approve;
+        defi_transfer_t defi_transfer;
+        defi_transfer_from_t defi_transfer_from;
     } param_data;
 
     selector_t selectorIndex;

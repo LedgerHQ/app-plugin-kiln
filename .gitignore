@@ -24,3 +24,5 @@ __pycache__/
 tests/node_modules
 tests/lib
 tests/elfs
+.DS_Store
+snapshots-tmp

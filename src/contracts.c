@@ -8,7 +8,7 @@
  * ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝
  *
  * Kiln Ethereum Ledger App
- * (c) 2022-2024 Kiln
+ * (c) 2022-2025 Kiln
  *
  * contact@kiln.fi
  ********************************************************************************/
@@ -56,6 +56,27 @@ static const uint32_t KILN_LR_DELEGATE_TO_SELECTOR = 0xeea9064b;
 // --- cast sig "undelegate(address)"
 static const uint32_t KILN_LR_UNDELEGATE_SELECTOR = 0xda8be864;
 
+// DEFI - ERC20 Strategies
+// --- cast sig "deposit(uint256,address)"
+static const uint32_t KILN_DEFI_DEPOSIT_SELECTOR = 0x6e553f65;
+// --- cast sig "mint(uint256,address)"
+static const uint32_t KILN_DEFI_MINT_SELECTOR = 0x94bf804d;
+// --- cast sig "withdraw(uint256,address,address)"
+static const uint32_t KILN_DEFI_WITHDRAW_SELECTOR = 0xb460af94;
+// --- cast sig "redeem(uint256,address,address)"
+static const uint32_t KILN_DEFI_REDEEM_SELECTOR = 0xba087652;
+// --- cast sig "approve(address,uint256)"
+static const uint32_t KILN_DEFI_APPROVE_SELECTOR = 0x095ea7b3;
+// --- cast sig "transfer(address,uint256)"
+static const uint32_t KILN_DEFI_TRANSFER_SELECTOR = 0xa9059cbb;
+// -- cast sig "transferFrom(address,address,uint256)"
+static const uint32_t KILN_DEFI_TRANSFER_FROM_SELECTOR = 0x23b872dd;
+
+const char ocv2_exit_queues[OCV2_MAX_EXIT_QUEUES][ADDRESS_STR_LEN] = {
+    "0x8d6Fd650500f82c7D978a440348e5a9b886943bF",  // Kiln
+    "0x86358F7B33b599c484e0335B8Ee4f7f7f92d8b60"   // Coinbase
+};
+
 const char lr_strategy_addresses[LR_STRATEGIES_COUNT][ADDRESS_STR_LEN] = {
     "0x54945180dB7943c0ed0FEE7EdaB2Bd24620256bc",  // cbETH
     "0x93c4b944D05dfe6df7645A86cd2206016c51564D",  // stETH
@@ -98,6 +119,61 @@ const char lr_tickers[LR_STRATEGIES_COUNT][MAX_TICKER_LEN] = {"cbETH",
 
 const char lr_kiln_operator_address[ADDRESS_STR_LEN] = "0x1f8C8b1d78d01bCc42ebdd34Fae60181bD697662";
 
+// ****************************************************************************
+// For DeFi, there is no way to get the 4626 asset() address in the kiln plugin
+// because it is not passed in the calldata cf ERC4626 standard interface.
+// To counter this, we have to hardcode the address and ticker of the asset()
+// of each Kiln DeFi 4626 vault.
+// ----------------------------------------------------------------------------
+// for the following 6 arrays, indexes are always matching.
+
+// note: we do not check chain ids because we trust the manifest of the app to do it
+// and the deployer of the contract to not deploy on similar addresses cross chain.
+
+const char defi_vaults_addresses[DEFI_VAULTS_COUNT][ADDRESS_STR_LEN] = {
+    "0x7DAEBa3F217614E409F85d3014D33923a6b03630",   // seUSDS
+    "0x4B20748c3Dd973f1456eccDE4FF84D54792dcD3e",   // aeUSDA
+    "0x96B22EB7178d116797e57197e586b70FedAE8Fdd",   // mstkeUSDT
+    "0x334F5d28a71432f8fc21C7B2B6F5dBbcD8B32A7b",   // mstkeUSDC
+    "0xB9E62Cb9b4cE8ec13c886FaE67369Da417EE2714",   // ceUSDC
+    "0xbd08C57f7448a5794bf4faeE067EC71AA64ef26D",   // seDAI
+    "0xD88714E295da03a07BcB8aD4a4dbE87fa42d75f9",   // aeUSDS
+    "0x4Ef971774c77865FF8Ec35f274474CB0eD9c48FA",   // aeDAI
+    "0xD2011d314aCAA68E5401E7f5AeC3Be6d2C574DCf",   // aeUSDC
+    "0x4D431856295413906075dD40266d83624E09C672"};  // aeUSDT
+
+const char defi_vaults_names[DEFI_VAULTS_COUNT][ADDRESS_STR_LEN] = {
+    "Yield Bearing Sky USDS",
+    "Yield Bearing Angle USDA",
+    "Yield Bearing Steakhouse Morpho USDT",
+    "Yield Bearing Steakhouse Morpho USDC",
+    "Yield Bearing Compound USDC",
+    "Yield Bearing Spark DAI",
+    "Yield Bearing AAVE USDS",
+    "Yield Bearing AAVE DAI",
+    "Yield Bearing AAVE USDC",
+    "Yield Bearing AAVE USDT"};
+
+const char defi_shares_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN] = {"seUSDS",
+                                                                   "aeUSDA",
+                                                                   "mstkeUSDT",
+                                                                   "mstkeUSDC",
+                                                                   "ceUSDC",
+                                                                   "seDAI",
+                                                                   "aeUSDS",
+                                                                   "aeDAI",
+                                                                   "aeUSDC",
+                                                                   "aeUSDT"};
+
+const uint8_t defi_shares_decimals[DEFI_VAULTS_COUNT] = {18, 18, 18, 18, 18, 18, 18, 18, 18, 18};
+
+const char defi_assets_names[DEFI_VAULTS_COUNT][MAX_TICKER_LEN] =
+    {"USDS", "USDA", "USDT", "USDC", "USDC", "DAI", "USDS", "DAI", "USDC", "USDT"};
+
+const uint8_t defi_assets_decimals[DEFI_VAULTS_COUNT] = {18, 18, 6, 6, 6, 18, 18, 18, 6, 6};
+
+// ****************************************************************************
+
 // Array of all supported selectors.
 const uint32_t KILN_SELECTORS[NUM_SELECTORS] = {
     // V1
@@ -120,4 +196,12 @@ const uint32_t KILN_SELECTORS[NUM_SELECTORS] = {
     KILN_LR_COMPLETE_QUEUED_WITHDRAWALS_SELECTOR,
     KILN_LR_DELEGATE_TO_SELECTOR,
     KILN_LR_UNDELEGATE_SELECTOR,
+    // DEFI
+    KILN_DEFI_DEPOSIT_SELECTOR,
+    KILN_DEFI_MINT_SELECTOR,
+    KILN_DEFI_WITHDRAW_SELECTOR,
+    KILN_DEFI_REDEEM_SELECTOR,
+    KILN_DEFI_APPROVE_SELECTOR,
+    KILN_DEFI_TRANSFER_SELECTOR,
+    KILN_DEFI_TRANSFER_FROM_SELECTOR,
 };

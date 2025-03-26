@@ -8,7 +8,7 @@
  * ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝
  *
  * Kiln Ethereum Ledger App
- * (c) 2022-2024 Kiln
+ * (c) 2022-2025 Kiln
  *
  * contact@kiln.fi
  ********************************************************************************/
@@ -17,6 +17,13 @@
 
 void handle_finalize(ethPluginFinalize_t *msg) {
     context_t *context = (context_t *) msg->pluginContext;
+
+    // if any of the parsers did not complete, we return an error
+    if (context->next_param != 0) {
+        PRINTF("Parser did not complete: next_param is %d\n", context->next_param);
+        msg->result = ETH_PLUGIN_RESULT_ERROR;
+        return;
+    }
 
     msg->uiType = ETH_UI_TYPE_GENERIC;
 
@@ -78,6 +85,32 @@ void handle_finalize(ethPluginFinalize_t *msg) {
             msg->numScreens = 1;
             msg->result = ETH_PLUGIN_RESULT_OK;
             break;
+
+        case KILN_DEFI_DEPOSIT:
+        case KILN_DEFI_MINT:
+            msg->numScreens = 4;
+            msg->result = ETH_PLUGIN_RESULT_OK;
+            break;
+
+        case KILN_DEFI_WITHDRAW:
+        case KILN_DEFI_REDEEM:
+            msg->numScreens = 5;
+            msg->result = ETH_PLUGIN_RESULT_OK;
+            break;
+
+        case KILN_DEFI_APPROVE:
+            msg->numScreens = 4;
+            msg->result = ETH_PLUGIN_RESULT_OK;
+            break;
+        case KILN_DEFI_TRANSFER:
+            msg->numScreens = 4;
+            msg->result = ETH_PLUGIN_RESULT_OK;
+            break;
+        case KILN_DEFI_TRANSFER_FROM:
+            msg->numScreens = 5;
+            msg->result = ETH_PLUGIN_RESULT_OK;
+            break;
+
         default:
             PRINTF("Selector Index not supported: %d\n", context->selectorIndex);
             msg->result = ETH_PLUGIN_RESULT_ERROR;

@@ -8,7 +8,7 @@
  * ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝
  *
  * Kiln Ethereum Ledger App
- * (c) 2022-2024 Kiln
+ * (c) 2022-2025 Kiln
  *
  * contact@kiln.fi
  ********************************************************************************/
@@ -47,6 +47,16 @@ void handle_query_contract_id(ethQueryContractID_t *msg) {
         case KILN_LR_DELEGATE_TO:
         case KILN_LR_UNDELEGATE:
             strlcpy(msg->version, "EigenLayer", msg->versionLength);
+            break;
+
+        case KILN_DEFI_DEPOSIT:
+        case KILN_DEFI_MINT:
+        case KILN_DEFI_WITHDRAW:
+        case KILN_DEFI_REDEEM:
+        case KILN_DEFI_APPROVE:
+        case KILN_DEFI_TRANSFER:
+        case KILN_DEFI_TRANSFER_FROM:
+            strlcpy(msg->version, "DeFi", msg->versionLength);
             break;
 
         default:

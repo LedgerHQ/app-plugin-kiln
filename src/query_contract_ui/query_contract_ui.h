@@ -8,7 +8,7 @@
  * ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝
  *
  * Kiln Ethereum Ledger App
- * (c) 2022-2024 Kiln
+ * (c) 2022-2025 Kiln
  *
  * contact@kiln.fi
  ********************************************************************************/
@@ -40,3 +40,12 @@ bool queue_withdrawals_ui(ethQueryContractUI_t *msg, context_t *context);
 bool complete_queued_withdrawals_ui(ethQueryContractUI_t *msg, context_t *context);
 bool delegate_to_ui(ethQueryContractUI_t *msg, context_t *context);
 bool undelegate_ui(ethQueryContractUI_t *msg);
+
+// DeFi UI
+bool defi_deposit_ui(ethQueryContractUI_t *msg, context_t *context);
+bool defi_mint_ui(ethQueryContractUI_t *msg, context_t *context);
+bool defi_withdraw_ui(ethQueryContractUI_t *msg, context_t *context);
+bool defi_redeem_ui(ethQueryContractUI_t *msg, context_t *context);
+bool defi_approve_ui(ethQueryContractUI_t *msg, context_t *context);
+bool defi_transfer_ui(ethQueryContractUI_t *msg, context_t *context);
+bool defi_transfer_from_ui(ethQueryContractUI_t *msg, context_t *context);
