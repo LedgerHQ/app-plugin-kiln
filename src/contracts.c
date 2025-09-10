@@ -13,7 +13,7 @@
  * contact@kiln.fi
  ********************************************************************************/
 
-#include "kiln_plugin.h"
+#include "plugin.h"
 
 // ONCHAIN V1 - Solo Staking
 // --- cast sig "deposit()"

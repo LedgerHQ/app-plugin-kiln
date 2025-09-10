@@ -13,7 +13,7 @@
  * contact@kiln.fi
  ********************************************************************************/
 
-#include "kiln_plugin.h"
+#include "plugin.h"
 
 void handle_finalize(ethPluginFinalize_t *msg) {
     context_t *context = (context_t *) msg->pluginContext;

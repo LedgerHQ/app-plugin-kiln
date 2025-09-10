@@ -13,14 +13,11 @@
  * contact@kiln.fi
  ********************************************************************************/
 
-#include "kiln_plugin.h"
+#include "plugin.h"
 
 uint8_t get_vault_index(ethPluginProvideParameter_t *msg) {
     char to_address[ADDRESS_STR_LEN];
-    getEthDisplayableAddress(msg->pluginSharedRO->txContent->destination,
-                             to_address,
-                             sizeof(to_address),
-                             0);
+    getEthDisplayableAddress(msg->txContent->destination, to_address, sizeof(to_address), 0);
 
     for (uint8_t i = 0; i < DEFI_VAULTS_COUNT; i += 1) {
         if (memcmp(to_address, defi_vaults_addresses[i], ADDRESS_STR_LEN) == 0) {

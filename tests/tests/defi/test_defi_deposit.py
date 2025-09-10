@@ -7,13 +7,12 @@ vault_contract = load_contract(
 )
 
 # Test generated using cast calldata "deposit(uint256,address)" 1000000000000000000 0x7DAEBa3F217614E409F85d3014D33923a6b03630
-def test_defi_deposit(backend, firmware, navigator, test_name, wallet_addr):
+def test_defi_deposit(backend, navigator, test_name, wallet_addr):
     data = "0x6e553f650000000000000000000000000000000000000000000000000de0b6b3a76400000000000000000000000000007daeba3f217614e409f85d3014d33923a6b03630"
     run_test(
         vault_contract, 
         data, 
         backend, 
-        firmware, 
         navigator, 
         test_name, 
         wallet_addr,
