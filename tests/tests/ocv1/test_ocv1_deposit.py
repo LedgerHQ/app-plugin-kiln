@@ -5,13 +5,12 @@ contract_ocv1 = load_contract(
 )
 
 # Test from https://etherscan.io/tx/0xea17de5f3cc81f6638c714a7be936e37d652c080c66f333df765fbe0760eaec2
-def test_ocv1_deposit(backend, firmware, navigator, test_name, wallet_addr):
+def test_ocv1_deposit(backend, navigator, test_name, wallet_addr):
     data = "0xd0e30db0"
     run_test(
         contract_ocv1, 
         data, 
         backend, 
-        firmware, 
         navigator, 
         test_name, 
         wallet_addr,

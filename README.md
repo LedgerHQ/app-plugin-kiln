@@ -32,11 +32,11 @@ The plugin codebase follows the 6 steps of the plugin flow:
 Other important files:
 
 - `src/contracts.c` holds all the constant representing contract functions, parameters or known contracts mappings.
-- `src/kiln_plugin.h` is where we define all the parser states and the plugin context structure.
+- `src/plugin.h` is where we define all the parser states and the plugin context structure.
 
 ### Plugin context
 
-The plugin context is defined in `src/kiln_plugin.h` and holds the state of the plugin. It is passed to all the plugin functions.
+The plugin context is defined in `src/plugin.h` and holds the state of the plugin. It is passed to all the plugin functions.
 
 It is defined using a union of all the possible parser parameters of the plugin, and a `next_param` field to know which parser state to use next.
 

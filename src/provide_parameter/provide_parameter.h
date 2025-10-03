@@ -18,7 +18,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 
-#include "kiln_plugin.h"
+#include "plugin.h"
 
 void handle_v1_withdraw_funcs(ethPluginProvideParameter_t *msg, context_t *context);
 

@@ -13,7 +13,7 @@
  * contact@kiln.fi
  ********************************************************************************/
 
-#include "kiln_plugin.h"
+#include "plugin.h"
 #include "plugin_utils.h"
 
 void handle_init_contract(ethPluginInitContract_t *msg) {

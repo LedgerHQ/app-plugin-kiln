@@ -13,7 +13,7 @@
  * contact@kiln.fi
  ********************************************************************************/
 
-#include "kiln_plugin.h"
+#include "plugin.h"
 
 void handle_query_contract_id(ethQueryContractID_t *msg) {
     const context_t *context = (const context_t *) msg->pluginContext;

@@ -18,7 +18,7 @@
 #include <ctype.h>
 #include <stdbool.h>
 
-#include "kiln_plugin.h"
+#include "plugin.h"
 
 // On-Chain v1 UI
 bool stake_ui(ethQueryContractUI_t *msg);
