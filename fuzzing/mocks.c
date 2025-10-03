@@ -1,4 +1,4 @@
-#include "kiln_plugin.h"
+#include "plugin.h"
 #include "lcx_common.h"
 #include "lcx_hash.h"
 #include <stddef.h>
@@ -40,11 +40,14 @@ size_t strlcpy(char *dst, const char *src, size_t size) {
 cx_err_t cx_keccak_256_hash_iovec(const cx_iovec_t *iovec,
                                   size_t iovec_len,
                                   uint8_t digest[static CX_KECCAK_256_SIZE]) {
+    UNUSED(iovec);
+    UNUSED(iovec_len);
+    memset(digest, 0, CX_KECCAK_256_SIZE);
     return CX_OK;
 }
 
-void os_sched_exit(bolos_task_status_t exit_code) {
-    return;
+void __attribute__((noreturn)) os_sched_exit(bolos_task_status_t exit_code) {
+    UNUSED(exit_code);
 }
 
 void *pic(void *p) {

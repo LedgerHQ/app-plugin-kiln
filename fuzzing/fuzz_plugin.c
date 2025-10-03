@@ -1,4 +1,4 @@
-#include "kiln_plugin.h"
+#include "plugin.h"
 
 // set a small size to detect possible overflows
 #define NAME_LENGTH    3u

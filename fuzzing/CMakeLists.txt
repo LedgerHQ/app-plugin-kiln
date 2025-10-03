@@ -42,7 +42,7 @@ string(REPLACE " " ";" COMPILATION_FLAGS ${COMPILATION_FLAGS_})
 
 add_compile_options(-Wall -Wextra -g -pedantic)
 # Just to limit compilation warnings of the plugin sources
-add_compile_options(-Wno-implicit-function-declaration)
+add_compile_options(-Wno-implicit-function-declaration -Wno-newline-eof -Wno-invalid-noreturn)
 # Flag depending on the Build Type
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -ggdb2 -O3")
@@ -69,6 +69,7 @@ add_compile_definitions(
     HAVE_SHA256
     HAVE_SHA3
     HAVE_SHA512
+    OS_IO_SEPH_BUFFER_SIZE=300
 )
 
 include_directories(
@@ -77,6 +78,8 @@ include_directories(
     ${BOLOS_SDK}/lib_cxng/include
     ${BOLOS_SDK}/lib_cxng/src
     ${BOLOS_SDK}/target/nanox/include
+    ${BOLOS_SDK}/io/include
+    ${BOLOS_SDK}/io_legacy/include
     ${ETH_DIR}/src
     ${SRC_DIR}
 )
