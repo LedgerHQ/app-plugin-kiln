@@ -8,7 +8,7 @@
  * ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝
  *
  * Kiln Ethereum Ledger App
- * (c) 2022-2024 Kiln
+ * (c) 2022-2025 Kiln
  *
  * contact@kiln.fi
  ********************************************************************************/
@@ -114,7 +114,7 @@ void handle_lr_deposit_into_strategy(ethPluginProvideParameter_t *msg, context_t
     // [ 68] amount
 
     uint8_t buffer[ADDRESS_LENGTH];
-    char address_buffer[ADDRESS_STR_LEN];
+    char address_buffer[ADDRESS_STR_LEN + 1];
 
     switch (context->next_param) {
         case LR_DEPOSIT_INTO_STRATEGY_STRATEGY:
@@ -217,7 +217,11 @@ void handle_lr_queue_withdrawals(ethPluginProvideParameter_t *msg, context_t *co
         case LR_QUEUE_WITHDRAWALS_QWITHDRAWALS_LENGTH:
             U2BE_from_parameter(msg->parameter, &params->queued_withdrawals_count);
             params->current_item_count = params->queued_withdrawals_count;
-            context->next_param = LR_QUEUE_WITHDRAWALS__QWITHDRAWALS_STRUCT_OFFSET;
+            if (params->current_item_count == 0) {
+                context->next_param = LR_QUEUE_WITHDRAWALS_UNEXPECTED_PARAMETER;
+            } else {
+                context->next_param = LR_QUEUE_WITHDRAWALS__QWITHDRAWALS_STRUCT_OFFSET;
+            }
             break;
 
         // ********************************************************************
@@ -319,7 +323,7 @@ void handle_lr_queue_withdrawals(ethPluginProvideParameter_t *msg, context_t *co
             {
                 uint8_t buffer[ADDRESS_LENGTH];
                 copy_address(buffer, msg->parameter, sizeof(buffer));
-                char address_buffer[ADDRESS_STR_LEN];
+                char address_buffer[ADDRESS_STR_LEN + 1];
                 getEthDisplayableAddress(buffer, address_buffer, sizeof(address_buffer), 0);
                 // we only support same withdrawer accross all the withdrawals
                 if (params->withdrawer[0] == '\0') {
@@ -368,7 +372,7 @@ void handle_lr_queue_withdrawals(ethPluginProvideParameter_t *msg, context_t *co
             {
                 uint8_t buffer[ADDRESS_LENGTH];
                 copy_address(buffer, msg->parameter, sizeof(buffer));
-                char address_buffer[ADDRESS_STR_LEN];
+                char address_buffer[ADDRESS_STR_LEN + 1];
                 getEthDisplayableAddress(buffer, address_buffer, sizeof(address_buffer), 0);
 
                 uint8_t strategy_index = find_lr_known_strategy(address_buffer);
@@ -391,7 +395,22 @@ void handle_lr_queue_withdrawals(ethPluginProvideParameter_t *msg, context_t *co
             // get number of items to parse
             U2BE_from_parameter(msg->parameter, &params->current_item_count);
 
-            context->next_param = LR_QUEUE_WITHDRAWALS__QWITHDRAWALS__SHARES_ITEM;
+            if (params->current_item_count == 0) {
+                // here we arrive at the end of the queuedWithdrawal array element
+
+                // check if there are other queuedWithdrawals to parse
+                params->queued_withdrawals_count -= 1;
+                if (params->queued_withdrawals_count == 0) {
+                    // if not we finished parsing
+                    context->next_param = LR_QUEUE_WITHDRAWALS_UNEXPECTED_PARAMETER;
+                } else {
+                    // if there are other queuedWithdrawals we go back to parsing the
+                    // next queueWithdrawal struct
+                    context->next_param = LR_QUEUE_WITHDRAWALS__QWITHDRAWALS_STRATEGIES_OFFSET;
+                }
+            } else {
+                context->next_param = LR_QUEUE_WITHDRAWALS__QWITHDRAWALS__SHARES_ITEM;
+            }
             break;
         case LR_QUEUE_WITHDRAWALS__QWITHDRAWALS__SHARES_ITEM:
             // we skip parsing shares item as they are not needed for clearsigning
@@ -699,7 +718,7 @@ void handle_lr_complete_queued_withdrawals(ethPluginProvideParameter_t *msg, con
             {
                 uint8_t buffer[ADDRESS_LENGTH];
                 copy_address(buffer, msg->parameter, sizeof(buffer));
-                char address_buffer[ADDRESS_STR_LEN];
+                char address_buffer[ADDRESS_STR_LEN + 1];
                 getEthDisplayableAddress(buffer, address_buffer, sizeof(address_buffer), 0);
 
                 uint8_t strategy_index = find_lr_known_strategy(address_buffer);
@@ -909,7 +928,7 @@ void handle_lr_complete_queued_withdrawals(ethPluginProvideParameter_t *msg, con
             {
                 uint8_t buffer[ADDRESS_LENGTH];
                 copy_address(buffer, msg->parameter, sizeof(buffer));
-                char address_buffer[ADDRESS_STR_LEN];
+                char address_buffer[ADDRESS_STR_LEN + 1];
                 getEthDisplayableAddress(buffer, address_buffer, sizeof(address_buffer), 0);
 
                 uint8_t token_index = find_lr_known_erc20(address_buffer);
@@ -1075,7 +1094,7 @@ void handle_lr_delegate_to(ethPluginProvideParameter_t *msg, context_t *context)
     switch (context->next_param) {
         case LR_DELEGATE_TO_OPERATOR: {
             {
-                uint8_t buffer[ADDRESS_LENGTH];
+                uint8_t buffer[ADDRESS_LENGTH + 1];
                 copy_address(buffer, msg->parameter, sizeof(buffer));
                 getEthDisplayableAddress(buffer,
                                          params->operator_address,
@@ -1132,12 +1151,39 @@ void handle_lr_delegate_to(ethPluginProvideParameter_t *msg, context_t *context)
             break;
         case LR_DELEGATE_TO_SIGNATURE_SIG_ITEMS:
             // we skip parsing signature items as they are not needed for clearsigning
-
-            params->current_item_count -= 1;
-            if (params->current_item_count == 0) {
+            if (params->current_item_count >= PARAMETER_LENGTH) {
+                params->current_item_count -= PARAMETER_LENGTH;
+            } else {
                 context->next_param = LR_DELEGATE_TO_UNEXPECTED_PARAMETER;
             }
             break;
+        default:
+            PRINTF("Param not supported: %d\n", context->next_param);
+            msg->result = ETH_PLUGIN_RESULT_ERROR;
+            return;
+    }
+    msg->result = ETH_PLUGIN_RESULT_OK;
+}
+
+void handle_lr_undelegate(ethPluginProvideParameter_t *msg, context_t *context) {
+    // **************************************************************************
+    // FUNCTION TO PARSE
+    // **************************************************************************
+    //
+    // function undelegate(
+    //    address staker
+    // ) external
+    //
+    // **************************************************************************
+    // example
+    // [0] selector
+    // [4] address
+
+    switch (context->next_param) {
+        case LR_UNDELEGATE_ADDRESS: {
+            context->next_param = LR_UNDELEGATE_UNEXPECTED_PARAMETER;
+            break;
+        }
         default:
             PRINTF("Param not supported: %d\n", context->next_param);
             msg->result = ETH_PLUGIN_RESULT_ERROR;

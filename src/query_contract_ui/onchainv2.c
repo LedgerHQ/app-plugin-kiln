@@ -8,7 +8,7 @@
  * ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝
  *
  * Kiln Ethereum Ledger App
- * (c) 2022-2024 Kiln
+ * (c) 2022-2025 Kiln
  *
  * contact@kiln.fi
  ********************************************************************************/
@@ -21,8 +21,8 @@ bool stake_in_pool_ui(ethQueryContractUI_t *msg) {
     switch (msg->screenIndex) {
         case 0:
             strlcpy(msg->title, "Stake", msg->titleLength);
-            const uint8_t *eth_amount = msg->pluginSharedRO->txContent->value.value;
-            uint8_t eth_amount_size = msg->pluginSharedRO->txContent->value.length;
+            const uint8_t *eth_amount = msg->txContent->value.value;
+            uint8_t eth_amount_size = msg->txContent->value.length;
 
             ret = amountToString(eth_amount,
                                  eth_amount_size,

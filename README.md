@@ -7,23 +7,8 @@
 
 ![Kiln Logo](https://uploads-ssl.webflow.com/625db3caa8abd6c22d5f0ce3/6260572336892a801afd71e3_Kiln_Logo-Transparent-Dark.svg)
 
-This plug-in is compatible with Nano S / X devices, it enables to
-interact in a secure way with the Kiln On-Chain v1, v2 and EigenLayer Liquid Restaking contracts.
-
-## Prerequisite
-
-Clone the plugin to a new folder.
-
-```shell
-git clone https://github.com/LedgerHQ/app-plugin-kiln.git
-```
-
-Then in the same folder clone two more repositories, which is the plugin-tools and app-ethereum.
-
-```shell
-git clone https://github.com/LedgerHQ/plugin-tools.git                          #plugin-tools
-git clone --recurse-submodules https://github.com/LedgerHQ/app-ethereum.git     #app-ethereum
-```
+This plug-in is compatible with Nano S / X / SP devices, it enables to
+interact in a secure way with the Kiln On-Chain v1, v2, EigenLayer Liquid Restaking contracts, and DeFi vault contracts.
 
 ## Documentation
 
@@ -47,11 +32,11 @@ The plugin codebase follows the 6 steps of the plugin flow:
 Other important files:
 
 - `src/contracts.c` holds all the constant representing contract functions, parameters or known contracts mappings.
-- `src/kiln_plugin.h` is where we define all the parser states and the plugin context structure.
+- `src/plugin.h` is where we define all the parser states and the plugin context structure.
 
 ### Plugin context
 
-The plugin context is defined in `src/kiln_plugin.h` and holds the state of the plugin. It is passed to all the plugin functions.
+The plugin context is defined in `src/plugin.h` and holds the state of the plugin. It is passed to all the plugin functions.
 
 It is defined using a union of all the possible parser parameters of the plugin, and a `next_param` field to know which parser state to use next.
 
@@ -65,36 +50,27 @@ Each parser is a state machine that receives 32 bytes of data at a time (abi for
 
 ### Build
 
-Go to the plugin-tools folder and run the "./start" script.
-
 ```shell
-cd plugin-tools  # go to plugin folder
-./start.sh       # run the script start.sh
-```
-
-The script will build a docker image and attach a console.
-When the docker image is running go to the "app-plugin-kiln" folder and build the ".elf" files.
-
-```shell
-cd app-plugin-kiln/tests        # go to the tests folder in app-plugin-kiln
-./build_local_test_elfs.sh      # run the script build_local_test_elfs.sh
+$ git clone --recurse-submodules https://github.com/kilnfi/app-plugin-kiln-v2.git
+$ cd app-plugin-kiln-v2/
+$ docker run --rm -it \
+    -v "$(realpath .):/app" \
+    --user $(id -u $USER):$(id -g $USER) \
+    ghcr.io/ledgerhq/ledger-app-builder/ledger-app-dev-tools:latest \
+    make
 ```
 
 ### Tests
 
-The tests are in the `tests/src` folder. They are written in javascript and use the `@ledgerhq/hw-app-eth` library to simulate the device.
-
-The tests are run using the `yarn test` command.
+The tests are in the `tests/tests` folder. They are written in python and use the ragger framework developed by Ledger.
 
 The output of the tests is a series of screenshots stored in the `tests/snapshots-tmp` folder that are compared to the expected screenshots in the `tests/snapshots` folder. The latter are stored in the git repository to make sure we expect the correct outputs.
 
-To test the plugin go to the tests folder from the "app-plugin-kiln/tests" and run the script "test"
+The recommended way to test the plugin is to use the Ledger vscode extension to build and run the tests.
 
-```shell
-cd app-plugin-kiln/tests        # go to the tests folder in app-plugin-kiln
-yarn                            # install dependencies
-yarn test                       # run the script test
-```
+### Fuzzing
+
+The plugin is fuzzed using the `fuzzing` folder following ledger boilerplate.
 
 ### Continuous Integration
 
@@ -114,6 +90,16 @@ Smart contracts covered by this plugin are:
 | Mainnet | Kiln On-Chain v2 ExitQueue    | `0x8d6fd650500f82c7d978a440348e5a9b886943bf` |
 | Mainnet | EigenLayer Strategy Manager   | `0x858646372cc42e1a627fce94aa7a7033e7cf075a` |
 | Mainnet | EigenLayer Delegation Manager | `0x39053d51b77dc0d36036fc1fcc8cb819df8ef37a` |
+| Mainnet | Yield Bearing Sky USDS               | `0x7DAEBa3F217614E409F85d3014D33923a6b03630` |
+| Mainnet | Yield Bearing Angle USDA              | `0x4B20748c3Dd973f1456eccDE4FF84D54792dcD3e` |
+| Mainnet | Yield Bearing Steakhouse Morpho USDT  | `0x96B22EB7178d116797e57197e586b70FedAE8Fdd` |
+| Mainnet | Yield Bearing Steakhouse Morpho USDC  | `0x334F5d28a71432f8fc21C7B2B6F5dBbcD8B32A7b` |
+| Mainnet | Yield Bearing Compound USDC           | `0xB9E62Cb9b4cE8ec13c886FaE67369Da417EE2714` |
+| Mainnet | Yield Bearing Spark DAI               | `0xbd08C57f7448a5794bf4faeE067EC71AA64ef26D` |
+| Mainnet | Yield Bearing AAVE USDS               | `0xD88714E295da03a07BcB8aD4a4dbE87fa42d75f9` |
+| Mainnet | Yield Bearing AAVE DAI                | `0x4Ef971774c77865FF8Ec35f274474CB0eD9c48FA` |
+| Mainnet | Yield Bearing AAVE USDC               | `0xD2011d314aCAA68E5401E7f5AeC3Be6d2C574DCf` |
+| Mainnet | Yield Bearing AAVE USDT               | `0x4D431856295413906075dD40266d83624E09C672` |
 
 ## Clearsigning
 
@@ -124,9 +110,7 @@ Clearsigned:
 
 - tx.value
 
-![](/tests/snapshots/nanos_deposit/00000.png) ![](/tests/snapshots/nanos_deposit/00001.png) ![](/tests/snapshots/nanos_deposit/00002.png) ![](/tests/snapshots/nanos_deposit/00003.png) ![](/tests/snapshots/nanos_deposit/00004.png) ![](/tests/snapshots/nanos_deposit/00005.png)
-
-![](/tests/snapshots/nanox_deposit/00000.png) ![](/tests/snapshots/nanox_deposit/00001.png) ![](/tests/snapshots/nanox_deposit/00002.png) ![](/tests/snapshots/nanox_deposit/00003.png) ![](/tests/snapshots/nanox_deposit/00004.png) ![](/tests/snapshots/nanox_deposit/00005.png)
+![](/tests/snapshots/nanosp/test_ocv1_deposit/00000.png) ![](/tests/snapshots/nanosp/test_ocv1_deposit/00001.png) ![](/tests/snapshots/nanosp/test_ocv1_deposit/00002.png) ![](/tests/snapshots/nanosp/test_ocv1_deposit/00003.png) ![](/tests/snapshots/nanosp/test_ocv1_deposit/00004.png) ![](/tests/snapshots/nanosp/test_ocv1_deposit/00005.png)
 
 ### KILN ON-CHAIN v1 - Withdraw
 
@@ -135,9 +119,7 @@ Clearsigned:
 
 - none as BLS key is not digest to display on device and only owner of the validator can withdraw on its behalf so no attack vector possible.
 
-![](/tests/snapshots/nanos_withdraw/00000.png) ![](/tests/snapshots/nanos_withdraw/00001.png) ![](/tests/snapshots/nanos_withdraw/00002.png) ![](/tests/snapshots/nanos_withdraw/00003.png) ![](/tests/snapshots/nanos_withdraw/00004.png) ![](/tests/snapshots/nanos_withdraw/00005.png)
-
-![](/tests/snapshots/nanox_withdraw/00000.png) ![](/tests/snapshots/nanox_withdraw/00001.png) ![](/tests/snapshots/nanox_withdraw/00002.png) ![](/tests/snapshots/nanox_withdraw/00003.png) ![](/tests/snapshots/nanox_withdraw/00004.png) ![](/tests/snapshots/nanox_withdraw/00005.png)
+![](/tests/snapshots/nanosp/test_ocv1_withdraw/00000.png) ![](/tests/snapshots/nanosp/test_ocv1_withdraw/00001.png) ![](/tests/snapshots/nanosp/test_ocv1_withdraw/00002.png) ![](/tests/snapshots/nanosp/test_ocv1_withdraw/00003.png) ![](/tests/snapshots/nanosp/test_ocv1_withdraw/00004.png) ![](/tests/snapshots/nanosp/test_ocv1_withdraw/00005.png)
 
 ### KILN ON-CHAIN v1 - Withdraw EL
 
@@ -146,9 +128,7 @@ Clearsigned:
 
 - none as BLS key is not digest to display on device and only owner of the validator can withdraw on its behalf so no attack vector possible.
 
-![](/tests/snapshots/nanos_withdrawEL/00000.png) ![](/tests/snapshots/nanos_withdrawEL/00001.png) ![](/tests/snapshots/nanos_withdrawEL/00002.png) ![](/tests/snapshots/nanos_withdrawEL/00003.png) ![](/tests/snapshots/nanos_withdrawEL/00004.png) ![](/tests/snapshots/nanos_withdrawEL/00005.png)
-
-![](/tests/snapshots/nanox_withdrawEL/00000.png) ![](/tests/snapshots/nanox_withdrawEL/00001.png) ![](/tests/snapshots/nanox_withdrawEL/00002.png) ![](/tests/snapshots/nanox_withdrawEL/00003.png) ![](/tests/snapshots/nanox_withdrawEL/00004.png) ![](/tests/snapshots/nanox_withdrawEL/00005.png)
+![](/tests/snapshots/nanosp/test_ocv1_withdraw_el/00000.png) ![](/tests/snapshots/nanosp/test_ocv1_withdraw_el/00001.png) ![](/tests/snapshots/nanosp/test_ocv1_withdraw_el/00002.png) ![](/tests/snapshots/nanosp/test_ocv1_withdraw_el/00003.png) ![](/tests/snapshots/nanosp/test_ocv1_withdraw_el/00004.png) ![](/tests/snapshots/nanosp/test_ocv1_withdraw_el/00005.png)
 
 ### KILN ON-CHAIN v1 - Withdraw CL
 
@@ -157,9 +137,7 @@ Clearsigned:
 
 - none as BLS key is not digest to display on device and only owner of the validator can withdraw on its behalf so no attack vector possible.
 
-![](/tests/snapshots/nanos_withdrawCL/00000.png) ![](/tests/snapshots/nanos_withdrawCL/00001.png) ![](/tests/snapshots/nanos_withdrawCL/00002.png) ![](/tests/snapshots/nanos_withdrawCL/00003.png) ![](/tests/snapshots/nanos_withdrawCL/00004.png) ![](/tests/snapshots/nanos_withdrawCL/00005.png)
-
-![](/tests/snapshots/nanox_withdrawCL/00000.png) ![](/tests/snapshots/nanox_withdrawCL/00001.png) ![](/tests/snapshots/nanox_withdrawCL/00002.png) ![](/tests/snapshots/nanox_withdrawCL/00003.png) ![](/tests/snapshots/nanox_withdrawCL/00004.png) ![](/tests/snapshots/nanox_withdrawCL/00005.png)
+![](/tests/snapshots/nanosp/test_ocv1_withdraw_cl/00000.png) ![](/tests/snapshots/nanosp/test_ocv1_withdraw_cl/00001.png) ![](/tests/snapshots/nanosp/test_ocv1_withdraw_cl/00002.png) ![](/tests/snapshots/nanosp/test_ocv1_withdraw_cl/00003.png) ![](/tests/snapshots/nanosp/test_ocv1_withdraw_cl/00004.png) ![](/tests/snapshots/nanosp/test_ocv1_withdraw_cl/00005.png)
 
 ### KILN ON-CHAIN v1 - Batch Withdraw
 
@@ -167,9 +145,7 @@ Function `batchWithdraw(bytes validatorPubkeys)`
 
 - none as validatorPubkeys can represent many BLS keys that we can't store on the device. Also only owner of the validator can withdraw on its behalf so no attack vector possible.
 
-![](/tests/snapshots/nanos_batchWithdraw/00000.png) ![](/tests/snapshots/nanos_batchWithdraw/00001.png) ![](/tests/snapshots/nanos_batchWithdraw/00002.png) ![](/tests/snapshots/nanos_batchWithdraw/00003.png) ![](/tests/snapshots/nanos_batchWithdraw/00004.png) ![](/tests/snapshots/nanos_batchWithdraw/00005.png)
-
-![](/tests/snapshots/nanox_batchWithdraw/00000.png) ![](/tests/snapshots/nanox_batchWithdraw/00001.png) ![](/tests/snapshots/nanox_batchWithdraw/00002.png) ![](/tests/snapshots/nanox_batchWithdraw/00003.png) ![](/tests/snapshots/nanox_batchWithdraw/00004.png) ![](/tests/snapshots/nanox_batchWithdraw/00005.png)
+![](/tests/snapshots/nanosp/test_ocv1_batch_withdraw/00000.png) ![](/tests/snapshots/nanosp/test_ocv1_batch_withdraw/00001.png) ![](/tests/snapshots/nanosp/test_ocv1_batch_withdraw/00002.png) ![](/tests/snapshots/nanosp/test_ocv1_batch_withdraw/00003.png) ![](/tests/snapshots/nanosp/test_ocv1_batch_withdraw/00004.png) ![](/tests/snapshots/nanosp/test_ocv1_batch_withdraw/00005.png)
 
 ### KILN ON-CHAIN v1 - Batch Withdraw EL
 
@@ -178,9 +154,7 @@ Clearsigned:
 
 - none as validatorPubkeys can represent many BLS keys that we can't store on the device. Also only owner of the validator can withdraw on its behalf so no attack vector possible.
 
-![](/tests/snapshots/nanos_batchWithdrawEL/00000.png) ![](/tests/snapshots/nanos_batchWithdrawEL/00001.png) ![](/tests/snapshots/nanos_batchWithdrawEL/00002.png) ![](/tests/snapshots/nanos_batchWithdrawEL/00003.png) ![](/tests/snapshots/nanos_batchWithdrawEL/00004.png) ![](/tests/snapshots/nanos_batchWithdrawEL/00005.png)
-
-![](/tests/snapshots/nanox_batchWithdrawEL/00000.png) ![](/tests/snapshots/nanox_batchWithdrawEL/00001.png) ![](/tests/snapshots/nanox_batchWithdrawEL/00002.png) ![](/tests/snapshots/nanox_batchWithdrawEL/00003.png) ![](/tests/snapshots/nanox_batchWithdrawEL/00004.png) ![](/tests/snapshots/nanox_batchWithdrawEL/00005.png)
+![](/tests/snapshots/nanosp/test_ocv1_batch_withdraw_el/00000.png) ![](/tests/snapshots/nanosp/test_ocv1_batch_withdraw_el/00001.png) ![](/tests/snapshots/nanosp/test_ocv1_batch_withdraw_el/00002.png) ![](/tests/snapshots/nanosp/test_ocv1_batch_withdraw_el/00003.png) ![](/tests/snapshots/nanosp/test_ocv1_batch_withdraw_el/00004.png) ![](/tests/snapshots/nanosp/test_ocv1_batch_withdraw_el/00005.png)
 
 ### KILN ON-CHAIN v1 - Batch WithdrawCL
 
@@ -189,9 +163,7 @@ Clearsigned:
 
 - none as validatorPubkeys can represent many BLS keys that we can't store on the device. Also only owner of the validator can withdraw on its behalf so no attack vector possible.
 
-![](/tests/snapshots/nanos_batchWithdrawCL/00000.png) ![](/tests/snapshots/nanos_batchWithdrawCL/00001.png) ![](/tests/snapshots/nanos_batchWithdrawCL/00002.png) ![](/tests/snapshots/nanos_batchWithdrawCL/00003.png) ![](/tests/snapshots/nanos_batchWithdrawCL/00004.png) ![](/tests/snapshots/nanos_batchWithdrawCL/00005.png)
-
-![](/tests/snapshots/nanox_batchWithdrawCL/00000.png) ![](/tests/snapshots/nanox_batchWithdrawCL/00001.png) ![](/tests/snapshots/nanox_batchWithdrawCL/00002.png) ![](/tests/snapshots/nanox_batchWithdrawCL/00003.png) ![](/tests/snapshots/nanox_batchWithdrawCL/00004.png) ![](/tests/snapshots/nanox_batchWithdrawCL/00005.png)
+![](/tests/snapshots/nanosp/test_ocv1_batch_withdraw_cl/00000.png) ![](/tests/snapshots/nanosp/test_ocv1_batch_withdraw_cl/00001.png) ![](/tests/snapshots/nanosp/test_ocv1_batch_withdraw_cl/00002.png) ![](/tests/snapshots/nanosp/test_ocv1_batch_withdraw_cl/00003.png) ![](/tests/snapshots/nanosp/test_ocv1_batch_withdraw_cl/00004.png) ![](/tests/snapshots/nanosp/test_ocv1_batch_withdraw_cl/00005.png)
 
 ### KILN ON-CHAIN v1 - Request Exits
 
@@ -200,9 +172,7 @@ Clearsigned:
 
 - none as validatorPubkeys can represent many BLS keys that we can't store on the device. Also only owner of the validator can request exit on its behalf so no attack vector possible.
 
-![](/tests/snapshots/nanos_requestValidatorsExit/00000.png) ![](/tests/snapshots/nanos_requestValidatorsExit/00001.png) ![](/tests/snapshots/nanos_requestValidatorsExit/00002.png) ![](/tests/snapshots/nanos_requestValidatorsExit/00003.png) ![](/tests/snapshots/nanos_requestValidatorsExit/00004.png) ![](/tests/snapshots/nanos_requestValidatorsExit/00005.png)
-
-![](/tests/snapshots/nanox_requestValidatorsExit/00000.png) ![](/tests/snapshots/nanox_requestValidatorsExit/00001.png) ![](/tests/snapshots/nanox_requestValidatorsExit/00002.png) ![](/tests/snapshots/nanox_requestValidatorsExit/00003.png) ![](/tests/snapshots/nanox_requestValidatorsExit/00004.png) ![](/tests/snapshots/nanox_requestValidatorsExit/00005.png)
+![](/tests/snapshots/nanosp/test_ocv1_request_validators_exit/00000.png) ![](/tests/snapshots/nanosp/test_ocv1_request_validators_exit/00001.png) ![](/tests/snapshots/nanosp/test_ocv1_request_validators_exit/00002.png) ![](/tests/snapshots/nanosp/test_ocv1_request_validators_exit/00003.png) ![](/tests/snapshots/nanosp/test_ocv1_request_validators_exit/00004.png) ![](/tests/snapshots/nanosp/test_ocv1_request_validators_exit/00005.png)
 
 ### KILN ON-CHAIN v2 - Stake
 
@@ -211,9 +181,7 @@ Clearsigned:
 
 - tx.value
 
-![](/tests/snapshots/nanos_stakev2/00000.png) ![](/tests/snapshots/nanos_stakev2/00001.png) ![](/tests/snapshots/nanos_stakev2/00002.png) ![](/tests/snapshots/nanos_stakev2/00003.png) ![](/tests/snapshots/nanos_stakev2/00004.png) ![](/tests/snapshots/nanos_stakev2/00005.png)
-
-![](/tests/snapshots/nanox_stakev2/00000.png) ![](/tests/snapshots/nanox_stakev2/00001.png) ![](/tests/snapshots/nanox_stakev2/00002.png) ![](/tests/snapshots/nanox_stakev2/00003.png) ![](/tests/snapshots/nanox_stakev2/00004.png) ![](/tests/snapshots/nanox_stakev2/00005.png)
+![](/tests/snapshots/nanosp/test_ocv2_stake/00000.png) ![](/tests/snapshots/nanosp/test_ocv2_stake/00001.png) ![](/tests/snapshots/nanosp/test_ocv2_stake/00002.png) ![](/tests/snapshots/nanosp/test_ocv2_stake/00003.png) ![](/tests/snapshots/nanosp/test_ocv2_stake/00004.png) ![](/tests/snapshots/nanosp/test_ocv2_stake/00005.png)
 
 ### KILN ON-CHAIN v2 - RequestExit
 
@@ -222,9 +190,7 @@ Clearsigned:
 
 - none as shares is not 1:1 with ETH value, it would confuse users
 
-![](/tests/snapshots/nanos_requestExitv2/00000.png) ![](/tests/snapshots/nanos_requestExitv2/00001.png) ![](/tests/snapshots/nanos_requestExitv2/00002.png) ![](/tests/snapshots/nanos_requestExitv2/00003.png) ![](/tests/snapshots/nanos_requestExitv2/00004.png) ![](/tests/snapshots/nanos_requestExitv2/00005.png)
-
-![](/tests/snapshots/nanox_requestExitv2/00000.png) ![](/tests/snapshots/nanox_requestExitv2/00001.png) ![](/tests/snapshots/nanox_requestExitv2/00002.png) ![](/tests/snapshots/nanox_requestExitv2/00003.png) ![](/tests/snapshots/nanox_requestExitv2/00004.png) ![](/tests/snapshots/nanox_requestExitv2/00005.png)
+![](/tests/snapshots/nanosp/test_ocv2_request_exit/00000.png) ![](/tests/snapshots/nanosp/test_ocv2_request_exit/00001.png) ![](/tests/snapshots/nanosp/test_ocv2_request_exit/00002.png) ![](/tests/snapshots/nanosp/test_ocv2_request_exit/00003.png) ![](/tests/snapshots/nanosp/test_ocv2_request_exit/00004.png) ![](/tests/snapshots/nanosp/test_ocv2_request_exit/00005.png)
 
 ### KILN ON-CHAIN v2 - MultiClaim
 
@@ -233,9 +199,7 @@ Clearsigned:
 
 - none
 
-![](/tests/snapshots/nanos_multiClaimv2/00000.png) ![](/tests/snapshots/nanos_multiClaimv2/00001.png) ![](/tests/snapshots/nanos_multiClaimv2/00002.png) ![](/tests/snapshots/nanos_multiClaimv2/00003.png) ![](/tests/snapshots/nanos_multiClaimv2/00004.png) ![](/tests/snapshots/nanos_multiClaimv2/00005.png)
-
-![](/tests/snapshots/nanox_multiClaimv2/00000.png) ![](/tests/snapshots/nanox_multiClaimv2/00001.png) ![](/tests/snapshots/nanox_multiClaimv2/00002.png) ![](/tests/snapshots/nanox_multiClaimv2/00003.png) ![](/tests/snapshots/nanox_multiClaimv2/00004.png) ![](/tests/snapshots/nanox_multiClaimv2/00005.png)
+![](/tests/snapshots/nanosp/test_ocv2_multiclaim/00000.png) ![](/tests/snapshots/nanosp/test_ocv2_multiclaim/00001.png) ![](/tests/snapshots/nanosp/test_ocv2_multiclaim/00002.png) ![](/tests/snapshots/nanosp/test_ocv2_multiclaim/00003.png) ![](/tests/snapshots/nanosp/test_ocv2_multiclaim/00004.png) ![](/tests/snapshots/nanosp/test_ocv2_multiclaim/00005.png)
 
 ### KILN ON-CHAIN v2 - Claim
 
@@ -244,9 +208,7 @@ Clearsigned:
 
 - none
 
-![](/tests/snapshots/nanos_claimv2/00000.png) ![](/tests/snapshots/nanos_claimv2/00001.png) ![](/tests/snapshots/nanos_claimv2/00002.png) ![](/tests/snapshots/nanos_claimv2/00003.png) ![](/tests/snapshots/nanos_claimv2/00004.png) ![](/tests/snapshots/nanos_claimv2/00005.png)
-
-![](/tests/snapshots/nanox_claimv2/00000.png) ![](/tests/snapshots/nanox_claimv2/00001.png) ![](/tests/snapshots/nanox_claimv2/00002.png) ![](/tests/snapshots/nanox_claimv2/00003.png) ![](/tests/snapshots/nanox_claimv2/00004.png) ![](/tests/snapshots/nanox_claimv2/00005.png)
+![](/tests/snapshots/nanosp/test_ocv2_claim/00000.png) ![](/tests/snapshots/nanosp/test_ocv2_claim/00001.png) ![](/tests/snapshots/nanosp/test_ocv2_claim/00002.png) ![](/tests/snapshots/nanosp/test_ocv2_claim/00003.png) ![](/tests/snapshots/nanosp/test_ocv2_claim/00004.png) ![](/tests/snapshots/nanosp/test_ocv2_claim/00005.png)
 
 ### EigenLayer Strategy Manager - LR Deposit Into Strategy
 
@@ -257,9 +219,7 @@ Clearsigned:
 - erc20: using mapping in `contracts.c`, it is either recognized or displayed as "UNKOWN"
 - amount
 
-![](/tests/snapshots/nanos_lrDepositIntoStrategyNormal/00000.png) ![](/tests/snapshots/nanos_lrDepositIntoStrategyNormal/00001.png) ![](/tests/snapshots/nanos_lrDepositIntoStrategyNormal/00002.png) ![](/tests/snapshots/nanos_lrDepositIntoStrategyNormal/00003.png) ![](/tests/snapshots/nanos_lrDepositIntoStrategyNormal/00004.png) ![](/tests/snapshots/nanos_lrDepositIntoStrategyNormal/00005.png) ![](/tests/snapshots/nanos_lrDepositIntoStrategyNormal/00006.png) ![](/tests/snapshots/nanos_lrDepositIntoStrategyNormal/00007.png)
-
-![](/tests/snapshots/nanox_lrDepositIntoStrategyNormal/00000.png) ![](/tests/snapshots/nanox_lrDepositIntoStrategyNormal/00001.png) ![](/tests/snapshots/nanox_lrDepositIntoStrategyNormal/00002.png) ![](/tests/snapshots/nanox_lrDepositIntoStrategyNormal/00003.png) ![](/tests/snapshots/nanox_lrDepositIntoStrategyNormal/00004.png) ![](/tests/snapshots/nanox_lrDepositIntoStrategyNormal/00005.png) ![](/tests/snapshots/nanox_lrDepositIntoStrategyNormal/00006.png) ![](/tests/snapshots/nanox_lrDepositIntoStrategyNormal/00007.png)
+![](/tests/snapshots/nanosp/test_lr_deposit_into_strategy/00000.png) ![](/tests/snapshots/nanosp/test_lr_deposit_into_strategy/00001.png) ![](/tests/snapshots/nanosp/test_lr_deposit_into_strategy/00002.png) ![](/tests/snapshots/nanosp/test_lr_deposit_into_strategy/00003.png) ![](/tests/snapshots/nanosp/test_lr_deposit_into_strategy/00004.png) ![](/tests/snapshots/nanosp/test_lr_deposit_into_strategy/00005.png)
 
 ### EigenLayer Delegation Manager - Delegate To
 
@@ -284,9 +244,7 @@ Clearsigned:
 
 Shares are confusing for users and would be hard to store properly on the device for display.
 
-![](/tests/snapshots/nanos_delegate_to_is_kiln/00000.png) ![](/tests/snapshots/nanos_delegate_to_is_kiln/00001.png) ![](/tests/snapshots/nanos_delegate_to_is_kiln/00002.png) ![](/tests/snapshots/nanos_delegate_to_is_kiln/00003.png) ![](/tests/snapshots/nanos_delegate_to_is_kiln/00004.png) ![](/tests/snapshots/nanos_delegate_to_is_kiln/00005.png) ![](/tests/snapshots/nanos_delegate_to_is_kiln/00006.png)
-
-![](/tests/snapshots/nanox_delegate_to_is_kiln/00000.png) ![](/tests/snapshots/nanox_delegate_to_is_kiln/00001.png) ![](/tests/snapshots/nanox_delegate_to_is_kiln/00002.png) ![](/tests/snapshots/nanox_delegate_to_is_kiln/00003.png) ![](/tests/snapshots/nanox_delegate_to_is_kiln/00004.png) ![](/tests/snapshots/nanox_delegate_to_is_kiln/00005.png) ![](/tests/snapshots/nanox_delegate_to_is_kiln/00006.png)
+![](/tests/snapshots/nanosp/test_lr_delegate_to/00000.png) ![](/tests/snapshots/nanosp/test_lr_delegate_to/00001.png) ![](/tests/snapshots/nanosp/test_lr_delegate_to/00002.png) ![](/tests/snapshots/nanosp/test_lr_delegate_to/00003.png) ![](/tests/snapshots/nanosp/test_lr_delegate_to/00004.png) ![](/tests/snapshots/nanosp/test_lr_delegate_to/00005.png)
 
 ### EigenLayer Delegation Manager - Undelegate
 
@@ -295,9 +253,7 @@ Clearsigned:
 
 - none as there is a staker == msg.sender requirement in the contract
 
-![](/tests/snapshots/nanos_lr_undelegate/00000.png) ![](/tests/snapshots/nanos_lr_undelegate/00001.png) ![](/tests/snapshots/nanos_lr_undelegate/00002.png) ![](/tests/snapshots/nanos_lr_undelegate/00003.png) ![](/tests/snapshots/nanos_lr_undelegate/00004.png) ![](/tests/snapshots/nanos_lr_undelegate/00005.png)
-
-![](/tests/snapshots/nanox_lr_undelegate/00000.png) ![](/tests/snapshots/nanox_lr_undelegate/00001.png) ![](/tests/snapshots/nanox_lr_undelegate/00002.png) ![](/tests/snapshots/nanox_lr_undelegate/00003.png) ![](/tests/snapshots/nanox_lr_undelegate/00004.png) ![](/tests/snapshots/nanox_lr_undelegate/00005.png)
+![](/tests/snapshots/nanosp/test_lr_undelegate/00000.png) ![](/tests/snapshots/nanosp/test_lr_undelegate/00001.png) ![](/tests/snapshots/nanosp/test_lr_undelegate/00002.png) ![](/tests/snapshots/nanosp/test_lr_undelegate/00003.png) ![](/tests/snapshots/nanosp/test_lr_undelegate/00004.png) ![](/tests/snapshots/nanosp/test_lr_undelegate/00005.png)
 
 ### EigenLayer Strategy Manager - Queue Withdrawals
 
@@ -308,7 +264,7 @@ struct QueuedWithdrawalParams {
     address[] strategies;
     uint256[] shares;
     address withdrawer;
-}
+
 
 function queueWithdrawals(
     QueuedWithdrawalParams[] queuedWithdrawalParams
@@ -322,9 +278,7 @@ Clearsigned:
 
 Shares are confusing for users and would be hard to store properly on the device for display.
 
-![](/tests/snapshots/nanos_lrQueueWithdrawals_1_2_dimension/00000.png) ![](/tests/snapshots/nanos_lrQueueWithdrawals_1_2_dimension/00001.png) ![](/tests/snapshots/nanos_lrQueueWithdrawals_1_2_dimension/00002.png) ![](/tests/snapshots/nanos_lrQueueWithdrawals_1_2_dimension/00003.png) ![](/tests/snapshots/nanos_lrQueueWithdrawals_1_2_dimension/00004.png) ![](/tests/snapshots/nanos_lrQueueWithdrawals_1_2_dimension/00005.png) ![](/tests/snapshots/nanos_lrQueueWithdrawals_1_2_dimension/00006.png) ![](/tests/snapshots/nanos_lrQueueWithdrawals_1_2_dimension/00007.png)
-
-![](/tests/snapshots/nanox_lrQueueWithdrawals_1_2_dimension/00000.png) ![](/tests/snapshots/nanox_lrQueueWithdrawals_1_2_dimension/00001.png) ![](/tests/snapshots/nanox_lrQueueWithdrawals_1_2_dimension/00002.png) ![](/tests/snapshots/nanox_lrQueueWithdrawals_1_2_dimension/00003.png) ![](/tests/snapshots/nanox_lrQueueWithdrawals_1_2_dimension/00004.png) ![](/tests/snapshots/nanox_lrQueueWithdrawals_1_2_dimension/00005.png) ![](/tests/snapshots/nanox_lrQueueWithdrawals_1_2_dimension/00006.png) ![](/tests/snapshots/nanox_lrQueueWithdrawals_1_2_dimension/00007.png)
+![](/tests/snapshots/nanosp/test_lr_queue_withdrawals/00000.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawals/00001.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawals/00002.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawals/00003.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawals/00004.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawals/00005.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawals/00006.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawals/00007.png) ![](/tests/snapshots/nanosp/test_lr_queue_withdrawals/00008.png)
 
 ### EigenLayer Strategy Manager - LR Complete Queued Withdrawals
 
@@ -356,6 +310,77 @@ Clearsigned:
 
 Shares are confusing for users and would be hard to store properly on the device for display.
 
-![](/tests/snapshots/nanos_lrCompleteQueuedWithdrawals/00000.png) ![](/tests/snapshots/nanos_lrCompleteQueuedWithdrawals/00001.png) ![](/tests/snapshots/nanos_lrCompleteQueuedWithdrawals/00002.png) ![](/tests/snapshots/nanos_lrCompleteQueuedWithdrawals/00003.png) ![](/tests/snapshots/nanos_lrCompleteQueuedWithdrawals/00004.png) ![](/tests/snapshots/nanos_lrCompleteQueuedWithdrawals/00005.png) ![](/tests/snapshots/nanos_lrCompleteQueuedWithdrawals/00006.png) ![](/tests/snapshots/nanos_lrCompleteQueuedWithdrawals/00007.png) ![](/tests/snapshots/nanos_lrCompleteQueuedWithdrawals/00008.png) ![](/tests/snapshots/nanos_lrCompleteQueuedWithdrawals/00009.png) ![](/tests/snapshots/nanos_lrCompleteQueuedWithdrawals/00010.png)
+![](/tests/snapshots/nanosp/test_lr_complete_queued_withdrawals/00000.png) ![](/tests/snapshots/nanosp/test_lr_complete_queued_withdrawals/00001.png) ![](/tests/snapshots/nanosp/test_lr_complete_queued_withdrawals/00002.png) ![](/tests/snapshots/nanosp/test_lr_complete_queued_withdrawals/00003.png) ![](/tests/snapshots/nanosp/test_lr_complete_queued_withdrawals/00004.png) ![](/tests/snapshots/nanosp/test_lr_complete_queued_withdrawals/00005.png) ![](/tests/snapshots/nanosp/test_lr_complete_queued_withdrawals/00006.png) ![](/tests/snapshots/nanosp/test_lr_complete_queued_withdrawals/00007.png)
 
-![](/tests/snapshots/nanox_lrCompleteQueuedWithdrawals/00000.png) ![](/tests/snapshots/nanox_lrCompleteQueuedWithdrawals/00001.png) ![](/tests/snapshots/nanox_lrCompleteQueuedWithdrawals/00002.png) ![](/tests/snapshots/nanox_lrCompleteQueuedWithdrawals/00003.png) ![](/tests/snapshots/nanox_lrCompleteQueuedWithdrawals/00004.png) ![](/tests/snapshots/nanox_lrCompleteQueuedWithdrawals/00005.png) ![](/tests/snapshots/nanox_lrCompleteQueuedWithdrawals/00006.png) ![](/tests/snapshots/nanox_lrCompleteQueuedWithdrawals/00007.png) ![](/tests/snapshots/nanox_lrCompleteQueuedWithdrawals/00008.png) ![](/tests/snapshots/nanox_lrCompleteQueuedWithdrawals/00009.png)
+### DeFi - Deposit
+
+Function: `deposit(uint256 assets, address receiver)`
+Clearsigned:
+
+- assets: amount of assets to deposit
+- receiver: address that will receive the shares
+
+![](/tests/snapshots/nanosp/test_defi_deposit/00000.png) ![](/tests/snapshots/nanosp/test_defi_deposit/00001.png) ![](/tests/snapshots/nanosp/test_defi_deposit/00002.png) ![](/tests/snapshots/nanosp/test_defi_deposit/00003.png) ![](/tests/snapshots/nanosp/test_defi_deposit/00004.png) ![](/tests/snapshots/nanosp/test_defi_deposit/00005.png) ![](/tests/snapshots/nanosp/test_defi_deposit/00006.png) ![](/tests/snapshots/nanosp/test_defi_deposit/00007.png) ![](/tests/snapshots/nanosp/test_defi_deposit/00008.png) ![](/tests/snapshots/nanosp/test_defi_deposit/00009.png)
+
+### DeFi - Mint
+
+Function: `mint(uint256 shares, address receiver)`
+Clearsigned:
+
+- shares: amount of shares to mint
+- receiver: address that will receive the shares
+
+![](/tests/snapshots/nanosp/test_defi_mint/00000.png) ![](/tests/snapshots/nanosp/test_defi_mint/00001.png) ![](/tests/snapshots/nanosp/test_defi_mint/00002.png) ![](/tests/snapshots/nanosp/test_defi_mint/00003.png) ![](/tests/snapshots/nanosp/test_defi_mint/00004.png) ![](/tests/snapshots/nanosp/test_defi_mint/00005.png) ![](/tests/snapshots/nanosp/test_defi_mint/00006.png) ![](/tests/snapshots/nanosp/test_defi_mint/00007.png) ![](/tests/snapshots/nanosp/test_defi_mint/00008.png) ![](/tests/snapshots/nanosp/test_defi_mint/00009.png)
+
+### DeFi - Withdraw
+
+Function: `withdraw(uint256 assets, address receiver, address owner)`
+Clearsigned:
+
+- assets: amount of assets to withdraw
+- receiver: address that will receive the assets
+- owner: address that owns the shares
+
+![](/tests/snapshots/nanosp/test_defi_withdraw/00000.png) ![](/tests/snapshots/nanosp/test_defi_withdraw/00001.png) ![](/tests/snapshots/nanosp/test_defi_withdraw/00002.png) ![](/tests/snapshots/nanosp/test_defi_withdraw/00003.png) ![](/tests/snapshots/nanosp/test_defi_withdraw/00004.png) ![](/tests/snapshots/nanosp/test_defi_withdraw/00005.png) ![](/tests/snapshots/nanosp/test_defi_withdraw/00006.png) ![](/tests/snapshots/nanosp/test_defi_withdraw/00007.png) ![](/tests/snapshots/nanosp/test_defi_withdraw/00008.png) ![](/tests/snapshots/nanosp/test_defi_withdraw/00009.png)
+
+### DeFi - Redeem
+
+Function: `redeem(uint256 shares, address receiver, address owner)`
+Clearsigned:
+
+- shares: amount of shares to redeem
+- receiver: address that will receive the assets
+- owner: address that owns the shares
+
+![](/tests/snapshots/nanosp/test_defi_redeem/00000.png) ![](/tests/snapshots/nanosp/test_defi_redeem/00001.png) ![](/tests/snapshots/nanosp/test_defi_redeem/00002.png) ![](/tests/snapshots/nanosp/test_defi_redeem/00003.png) ![](/tests/snapshots/nanosp/test_defi_redeem/00004.png) ![](/tests/snapshots/nanosp/test_defi_redeem/00005.png) ![](/tests/snapshots/nanosp/test_defi_redeem/00006.png) ![](/tests/snapshots/nanosp/test_defi_redeem/00007.png) ![](/tests/snapshots/nanosp/test_defi_redeem/00008.png) ![](/tests/snapshots/nanosp/test_defi_redeem/00009.png) ![](/tests/snapshots/nanosp/test_defi_redeem/00010.png)
+
+### DeFi - Approve
+
+Function: `approve(address spender, uint256 amount)`
+Clearsigned:
+
+- spender: address to allow spending tokens
+- amount: amount of tokens that can be spent
+
+![](/tests/snapshots/nanosp/test_defi_approve/00000.png) ![](/tests/snapshots/nanosp/test_defi_approve/00001.png) ![](/tests/snapshots/nanosp/test_defi_approve/00002.png) ![](/tests/snapshots/nanosp/test_defi_approve/00003.png) ![](/tests/snapshots/nanosp/test_defi_approve/00004.png) ![](/tests/snapshots/nanosp/test_defi_approve/00005.png) ![](/tests/snapshots/nanosp/test_defi_approve/00006.png) ![](/tests/snapshots/nanosp/test_defi_approve/00007.png) ![](/tests/snapshots/nanosp/test_defi_approve/00008.png) ![](/tests/snapshots/nanosp/test_defi_approve/00009.png)
+
+### DeFi - Transfer
+
+Function: `transfer(address to, uint256 amount)`
+Clearsigned:
+
+- to: address to receive tokens
+- amount: amount of tokens to transfer
+
+![](/tests/snapshots/nanosp/test_defi_transfer/00000.png) ![](/tests/snapshots/nanosp/test_defi_transfer/00001.png) ![](/tests/snapshots/nanosp/test_defi_transfer/00002.png) ![](/tests/snapshots/nanosp/test_defi_transfer/00003.png) ![](/tests/snapshots/nanosp/test_defi_transfer/00004.png) ![](/tests/snapshots/nanosp/test_defi_transfer/00005.png) ![](/tests/snapshots/nanosp/test_defi_transfer/00006.png) ![](/tests/snapshots/nanosp/test_defi_transfer/00007.png) ![](/tests/snapshots/nanosp/test_defi_transfer/00008.png) ![](/tests/snapshots/nanosp/test_defi_transfer/00009.png)
+
+### DeFi - TransferFrom
+
+Function: `transferFrom(address from, address to, uint256 amount)`
+Clearsigned:
+
+- from: address to transfer tokens from
+- to: address to receive tokens
+- amount: amount of tokens to transfer
+
+![](/tests/snapshots/nanosp/test_defi_transfer_from/00000.png) ![](/tests/snapshots/nanosp/test_defi_transfer_from/00001.png) ![](/tests/snapshots/nanosp/test_defi_transfer_from/00002.png) ![](/tests/snapshots/nanosp/test_defi_transfer_from/00003.png) ![](/tests/snapshots/nanosp/test_defi_transfer_from/00004.png) ![](/tests/snapshots/nanosp/test_defi_transfer_from/00005.png) ![](/tests/snapshots/nanosp/test_defi_transfer_from/00006.png) ![](/tests/snapshots/nanosp/test_defi_transfer_from/00007.png) ![](/tests/snapshots/nanosp/test_defi_transfer_from/00008.png) ![](/tests/snapshots/nanosp/test_defi_transfer_from/00009.png) ![](/tests/snapshots/nanosp/test_defi_transfer_from/00010.png)

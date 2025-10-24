@@ -8,12 +8,12 @@
  * ╚═╝  ╚═╝╚═╝╚══════╝╚═╝  ╚═══╝
  *
  * Kiln Ethereum Ledger App
- * (c) 2022-2024 Kiln
+ * (c) 2022-2025 Kiln
  *
  * contact@kiln.fi
  ********************************************************************************/
 
-#include "kiln_plugin.h"
+#include "plugin.h"
 #include "plugin_utils.h"
 
 void handle_init_contract(ethPluginInitContract_t *msg) {
@@ -51,6 +51,7 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
 
     switch (context->selectorIndex) {
         case KILN_V1_DEPOSIT:
+            break;
         case KILN_V1_WITHDRAW:
         case KILN_V1_WITHDRAW_EL:
         case KILN_V1_WITHDRAW_CL:
@@ -58,12 +59,19 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
         case KILN_V1_BATCH_WITHDRAW_EL:
         case KILN_V1_BATCH_WITHDRAW_CL:
         case KILN_V1_REQUEST_EXIT:
+            context->next_param = V1_WFUNCS_BYTES_OFFSET;
             break;
 
         case KILN_V2_STAKE:
+            break;
         case KILN_V2_REQUEST_EXIT:
+            context->next_param = V2_REQUEST_EXIT_AMOUNT;
+            break;
         case KILN_V2_MULTICLAIM:
+            context->next_param = V2_MULTICLAIM_EXIT_QUEUES_OFFSET;
+            break;
         case KILN_V2_CLAIM:
+            context->next_param = V2_CLAIM_TICKET_IDS_OFFSET;
             break;
 
         case KILN_LR_DEPOSIT_INTO_STRATEGY:
@@ -79,6 +87,29 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
             context->next_param = LR_DELEGATE_TO_OPERATOR;
             break;
         case KILN_LR_UNDELEGATE:
+            context->next_param = LR_UNDELEGATE_ADDRESS;
+            break;
+
+        case KILN_DEFI_DEPOSIT:
+            context->next_param = DEFI_DEPOSIT_ASSETS_AMOUNT;
+            break;
+        case KILN_DEFI_MINT:
+            context->next_param = DEFI_MINT_SHARES_AMOUNT;
+            break;
+        case KILN_DEFI_WITHDRAW:
+            context->next_param = DEFI_WITHDRAW_ASSETS_AMOUNT;
+            break;
+        case KILN_DEFI_REDEEM:
+            context->next_param = DEFI_REDEEM_SHARES_AMOUNT;
+            break;
+        case KILN_DEFI_APPROVE:
+            context->next_param = DEFI_APPROVE_SPENDER;
+            break;
+        case KILN_DEFI_TRANSFER:
+            context->next_param = DEFI_TRANSFER_TO;
+            break;
+        case KILN_DEFI_TRANSFER_FROM:
+            context->next_param = DEFI_TRANSFER_FROM_FROM;
             break;
 
         default:
